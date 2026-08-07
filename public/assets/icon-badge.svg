@@ -1,0 +1,43 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MangaTek">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#151022"/>
+      <stop offset="1" stop-color="#0a0812"/>
+    </linearGradient>
+    <linearGradient id="mtStroke2" x1="20" y1="30" x2="180" y2="170" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c9aeff"/>
+      <stop offset="0.55" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#6633c8"/>
+    </linearGradient>
+    <linearGradient id="mtSpeed2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff3b5c" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ff3b5c" stop-opacity="0.95"/>
+    </linearGradient>
+    <filter id="mtGlow2" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="0" y="0" width="200" height="200" rx="44" fill="url(#bgGrad)"/>
+  <rect x="1.5" y="1.5" width="197" height="197" rx="42.5" fill="none" stroke="#2a2436" stroke-width="1.5"/>
+
+  <g stroke="url(#mtSpeed2)" stroke-width="5" stroke-linecap="round">
+    <line x1="50" y1="146" x2="16" y2="180"/>
+    <line x1="61" y1="153" x2="33" y2="181"/>
+    <line x1="72" y1="159" x2="49" y2="181"/>
+  </g>
+
+  <path d="M 152 34 L 174 34 L 174 56" fill="none" stroke="#e7e3f5" stroke-width="5" stroke-linecap="square"/>
+
+  <path d="M 46 152 L 46 52 L 100 108 L 154 52 L 154 152"
+        fill="none"
+        stroke="url(#mtStroke2)"
+        stroke-width="15"
+        stroke-linecap="square"
+        stroke-linejoin="miter"
+        filter="url(#mtGlow2)"/>
+</svg>

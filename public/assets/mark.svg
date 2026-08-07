@@ -1,0 +1,39 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MangaTek">
+  <defs>
+    <linearGradient id="mtStroke" x1="20" y1="30" x2="180" y2="170" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c9aeff"/>
+      <stop offset="0.55" stop-color="#8b5cf6"/>
+      <stop offset="1" stop-color="#6633c8"/>
+    </linearGradient>
+    <linearGradient id="mtSpeed" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff3b5c" stop-opacity="0"/>
+      <stop offset="1" stop-color="#ff3b5c" stop-opacity="0.95"/>
+    </linearGradient>
+    <filter id="mtGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- anime speed lines, trailing bottom-left -->
+  <g stroke="url(#mtSpeed)" stroke-width="5" stroke-linecap="round">
+    <line x1="46" y1="150" x2="8" y2="188"/>
+    <line x1="58" y1="158" x2="26" y2="190"/>
+    <line x1="70" y1="164" x2="44" y2="190"/>
+  </g>
+
+  <!-- manga panel gutter corner, top-right -->
+  <path d="M 156 24 L 182 24 L 182 50" fill="none" stroke="#e7e3f5" stroke-width="5" stroke-linecap="square"/>
+
+  <!-- the M mark, blade-cut angular strokes -->
+  <path d="M 40 156 L 40 46 L 100 108 L 160 46 L 160 156"
+        fill="none"
+        stroke="url(#mtStroke)"
+        stroke-width="16"
+        stroke-linecap="square"
+        stroke-linejoin="miter"
+        filter="url(#mtGlow)"/>
+</svg>

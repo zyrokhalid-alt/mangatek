@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>تحويل المانجا إلى PDF أونلاين مجانًا | Manga to PDF - MangaTek</title>
+<meta name="description" content="حوّل أي فصل مانجا إلى ملف PDF مجانًا وبسرعة، أو اقرأه مباشرة أونلاين بدون تحميل. أداة Manga to PDF من MangaTek تدعم أشهر مواقع المانجا وبدون تسجيل.">
+<meta name="keywords" content="تحويل مانجا PDF, تحميل مانجا PDF, مانجا الى PDF, قراءة مانجا اونلاين, تنزيل فصل مانجا, أداة تحويل مانجا, Manga to PDF, Manga PDF Converter, Manga Chapter Downloader, Convert Manga Online, Free Manga to PDF Tool, MangaTek">
+<link rel="canonical" href="https://mangatek.com/convert-manga-to-pdf">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MangaTek">
+<meta property="og:locale" content="ar_AR">
+<meta property="og:url" content="https://mangatek.com/convert-manga-to-pdf">
+<meta property="og:title" content="تحويل المانجا إلى PDF أونلاين مجانًا | MangaTek">
+<meta property="og:description" content="حوّل أي فصل مانجا إلى PDF مجانًا في ثوانٍ، أو اقرأه مباشرة أونلاين بدون تسجيل.">
+<meta property="og:image" content="https://mangatek.com/assets/icon-badge.svg">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="تحويل المانجا إلى PDF أونلاين | MangaTek">
+<meta name="twitter:description" content="أداة مجانية لتحويل فصول المانجا إلى PDF أو قراءتها أونلاين مباشرة.">
+<meta name="twitter:image" content="https://mangatek.com/assets/icon-badge.svg">
+
+<link rel="icon" type="image/svg+xml" href="assets/icon-badge.svg">
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "الرئيسية", "item": "https://mangatek.com/" },
+    { "@type": "ListItem", "position": 2, "name": "تحويل مانجا إلى PDF", "item": "https://mangatek.com/convert-manga-to-pdf" }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "MangaTek Manga to PDF Converter",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Web",
+  "url": "https://mangatek.com/convert-manga-to-pdf",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "أداة مجانية أونلاين لتحويل فصول المانجا إلى PDF أو قراءتها مباشرة."
+}
+</script>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ic-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z" fill="currentColor"/></symbol>
+    <symbol id="ic-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 6.5c-1.6-1.2-3.9-1.8-6.5-1.8v13c2.6 0 4.9.6 6.5 1.8 1.6-1.2 3.9-1.8 6.5-1.8v-13c-2.6 0-4.9.6-6.5 1.8Z"/><path d="M12 6.5v13"/>
+    </symbol>
+    <symbol id="ic-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4v11"/><path d="M7.5 11 12 15.5 16.5 11"/><path d="M5 19.5h14"/>
+    </symbol>
+    <symbol id="ic-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.5 14.5 14.5 9.5"/><path d="M11 6.5 12.7 4.8a3.6 3.6 0 0 1 5.1 5.1L16 11.6"/><path d="M13 17.5 11.3 19.2a3.6 3.6 0 0 1-5.1-5.1L8 12.4"/>
+    </symbol>
+    <symbol id="ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="ic-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.5 2.5L16 9.5"/>
+    </symbol>
+    <symbol id="ic-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/>
+    </symbol>
+    <symbol id="ic-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></symbol>
+  </defs>
+</svg>
+
+<div class="scene"></div>
+
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="/" class="brand">
+      <img src="assets/mark.svg" class="brand-mark" alt="MangaTek">
+      <span class="brand-word"><span class="w-manga">Manga</span><span class="w-tek">Tek</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">الرئيسية</a></li>
+      <li><a href="/convert-manga-to-pdf" class="is-active">تحويل مانجا PDF</a></li>
+      <li><a href="/#sources">المصادر المدعومة</a></li>
+      <li><a href="/#faq">الأسئلة الشائعة</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="/" class="btn btn-outline btn-sm">
+        <svg class="icon"><use href="#ic-chevron"/></svg> الرئيسية
+      </a>
+    </div>
+  </div>
+</header>
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <a href="/">الرئيسية</a>
+  <svg class="icon crumb-sep"><use href="#ic-chevron"/></svg>
+  <span class="crumb-current">تحويل مانجا إلى PDF</span>
+</nav>
+
+<div class="content">
+
+  <section class="hero">
+    <p class="tagline"><svg class="icon icon--bolt"><use href="#ic-bolt"/></svg> اقرأ أو حوّل أي فصل مانجا إلى PDF في ثوانٍ</p>
+
+    <div class="field">
+      <input type="text" id="chapterUrl" placeholder="الصق رابط الفصل هنا">
+    </div>
+
+    <div class="quality-row" role="group" aria-label="اختر جودة PDF">
+      <span class="quality-label">الجودة:</span>
+      <button type="button" class="quality-opt" data-q="0.6">اقتصادي</button>
+      <button type="button" class="quality-opt is-active" data-q="0.85">متوسط</button>
+      <button type="button" class="quality-opt" data-q="0.95">عالي</button>
+    </div>
+
+    <div class="cta-row">
+      <button id="viewBtn" class="cta cta--ghost" onclick="startView()">
+        <svg class="icon"><use href="#ic-book"/></svg>
+        <span class="cta-label">قراءة الفصل الآن</span>
+      </button>
+      <button id="btn" class="cta" onclick="startSuperFastDownload()">
+        <svg class="icon"><use href="#ic-download"/></svg>
+        <span class="cta-label">تحميل PDF</span>
+      </button>
+    </div>
+
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar">0%</div>
+      </div>
+    </div>
+
+    <div id="status" class="status"></div>
+  </section>
+
+  <div class="ad-slot" id="adTop">
+    <span class="ad-slot-label">مساحة إعلانية</span>
+  </div>
+
+  <section class="reader" id="readerSection" hidden>
+    <div class="reader-head">
+      <h2><svg class="icon"><use href="#ic-book"/></svg> قراءة الفصل</h2>
+      <button class="reader-close" onclick="closeReader()">
+        <svg class="icon"><use href="#ic-close"/></svg> إغلاق
+      </button>
+    </div>
+    <div class="reader-images" id="readerImages"></div>
+    <button class="cta reader-download" onclick="startSuperFastDownload()">
+      <svg class="icon"><use href="#ic-download"/></svg>
+      <span class="cta-label">تحميل هذا الفصل PDF</span>
+    </button>
+  </section>
+
+  <section class="sources">
+    <h3 class="sources-title"><svg class="icon"><use href="#ic-link"/></svg> المصادر المدعومة</h3>
+    <p class="sources-sub">الصق رابط الفصل من أي من المواقع دي (أو غيرها) في الحقل فوق</p>
+    <div class="sources-grid" id="sourcesGrid">
+      <a href="https://mangadex.org" target="_blank" rel="noopener" class="source-chip">MangaDex</a>
+      <a href="https://mangadar.com" target="_blank" rel="noopener" class="source-chip">MangaDar</a>
+      <a href="https://webtoons.com" target="_blank" rel="noopener" class="source-chip">Webtoons</a>
+      <a href="https://asuracomic.net" target="_blank" rel="noopener" class="source-chip">Asura Scans</a>
+      <a href="https://reaperscans.com" target="_blank" rel="noopener" class="source-chip">Reaper Scans</a>
+    </div>
+  </section>
+
+  <div class="ad-slot" id="adBottom">
+    <span class="ad-slot-label">مساحة إعلانية</span>
+  </div>
+
+  <section class="section" style="padding-top:0">
+    <p style="color:var(--ink-faint); font-size:.82rem; line-height:1.9; text-align:center; max-width:720px; margin:0 auto;">
+      MangaTek Manga to PDF هي أداة مجانية أونلاين لتحويل فصول المانجا إلى ملفات PDF عالية الجودة، وتعمل أيضًا كـ Manga Reader لقراءة الفصول مباشرة بدون تحميل.
+      لا حاجة للتسجيل، ولا تُخزَّن أي بيانات شخصية — فقط الصق رابط الفصل واختر ما تريد.
+    </p>
+  </section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div class="footer-col">
+      <a href="/" class="footer-brand">
+        <img src="assets/mark.svg" class="brand-mark" alt="MangaTek">
+        <span class="brand-word"><span class="w-manga">Manga</span><span class="w-tek">Tek</span></span>
+      </a>
+      <p>منصة عربية مجانية لتحميل وتحويل وقراءة المانجا أونلاين.</p>
+    </div>
+    <div class="footer-col">
+      <h4>روابط سريعة</h4>
+      <ul>
+        <li><a href="/">الرئيسية</a></li>
+        <li><a href="/convert-manga-to-pdf">تحويل مانجا إلى PDF</a></li>
+        <li><a href="/#faq">الأسئلة الشائعة</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>قانوني</h4>
+      <ul>
+        <li><a href="/privacy-policy">سياسة الخصوصية</a></li>
+        <li><a href="/terms-of-service">شروط الاستخدام</a></li>
+        <li><a href="/dmca">DMCA</a></li>
+        <li><a href="/contact">تواصل معنا</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>الموقع</h4>
+      <ul>
+        <li><a href="/sitemap.xml">خريطة الموقع</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 MangaTek. جميع الحقوق محفوظة.</span>
+    <span class="footer-bottom-links">
+      <a href="/privacy-policy">الخصوصية</a>
+      <a href="/terms-of-service">الشروط</a>
+      <a href="/dmca">DMCA</a>
+    </span>
+  </div>
+</footer>
+
+<script>
+  let lastFetch = { url: null, images: null };
+  let selectedQuality = 0.85;
+
+  document.querySelectorAll('.quality-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.quality-opt').forEach(b => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      selectedQuality = parseFloat(btn.dataset.q);
+    });
+  });
+
+  async function getChapterImages(chapterUrl) {
+    if (lastFetch.url === chapterUrl && lastFetch.images) return lastFetch.images;
+    const res = await fetch('/api/get-images', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chapterUrl })
+    });
+    const data = await res.json();
+    if (!data.success) throw new Error(data.error);
+    lastFetch = { url: chapterUrl, images: data.images };
+    return data.images;
+  }
+
+  function fetchSingleImage(url, index, quality) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+        try {
+          const dataUrl = canvas.toDataURL("image/jpeg", quality);
+          resolve({ index, dataUrl, width: img.naturalWidth, height: img.naturalHeight });
+        } catch (e) {
+          reject(e);
+        }
+      };
+      img.onerror = () => reject(new Error("فشل صورة"));
+      img.src = url;
+    });
+  }
+
+  async function startSuperFastDownload() {
+    const chapterUrl = document.getElementById('chapterUrl').value;
+    const status = document.getElementById('status');
+    const btn = document.getElementById('btn');
+    const viewBtn = document.getElementById('viewBtn');
+    const progressContainer = document.getElementById('progressContainer');
+
+    if (!chapterUrl) return alert("أدخل الرابط!");
+
+    btn.disabled = true;
+    viewBtn.disabled = true;
+    progressContainer.style.display = 'block';
+    updateProgress(10, "ic-bolt", "جاري جلب الروابط بأسرع طريقة...");
+
+    try {
+      const images = await getChapterImages(chapterUrl);
+      updateProgress(30, "ic-bolt", `تم إيجاد ${images.length} صورة! جاري التحميل بالتوازي...`);
+
+      let completed = 0;
+      const downloadPromises = images.map((imgUrl, idx) => {
+        return fetchSingleImage(imgUrl, idx, selectedQuality)
+          .then(res => {
+            completed++;
+            const currentPercent = 30 + Math.round((completed / images.length) * 55);
+            updateProgress(currentPercent, "ic-bolt", `تم تحميل ${completed} من ${images.length} صورة...`);
+            return res;
+          })
+          .catch(() => null);
+      });
+
+      const results = await Promise.all(downloadPromises);
+      const validImages = results.filter(item => item !== null).sort((a, b) => a.index - b.index);
+
+      if (validImages.length === 0) throw new Error("سيرفر الصور يحظر التحميل المباشر.");
+
+      updateProgress(90, "ic-book", "جاري تجميع ملف الـ PDF...");
+
+      const { jsPDF } = window.jspdf;
+      let pdf = null;
+
+      for (const imgData of validImages) {
+        if (!pdf) {
+          pdf = new jsPDF({
+            orientation: imgData.width > imgData.height ? 'l' : 'p',
+            unit: 'px',
+            format: [imgData.width, imgData.height]
+          });
+        } else {
+          pdf.addPage([imgData.width, imgData.height], imgData.width > imgData.height ? 'l' : 'p');
+        }
+        pdf.addImage(imgData.dataUrl, 'JPEG', 0, 0, imgData.width, imgData.height);
+      }
+
+      pdf.save("mangatek_chapter.pdf");
+      updateProgress(100, "ic-check", "تم تحميل الفصل بنجاح!");
+
+    } catch (err) {
+      setStatusError(err.message);
+    } finally {
+      btn.disabled = false;
+      viewBtn.disabled = false;
+    }
+  }
+
+  async function startView() {
+    const chapterUrl = document.getElementById('chapterUrl').value;
+    const btn = document.getElementById('btn');
+    const viewBtn = document.getElementById('viewBtn');
+    const progressContainer = document.getElementById('progressContainer');
+
+    if (!chapterUrl) return alert("أدخل الرابط!");
+
+    btn.disabled = true;
+    viewBtn.disabled = true;
+    progressContainer.style.display = 'block';
+    updateProgress(20, "ic-bolt", "جاري جلب صفحات الفصل...");
+
+    try {
+      const images = await getChapterImages(chapterUrl);
+      if (images.length === 0) throw new Error("مفيش صور اتلاقت في الرابط ده.");
+
+      updateProgress(100, "ic-book", `جاهز! ${images.length} صفحة`);
+      renderReader(images);
+
+    } catch (err) {
+      setStatusError(err.message);
+    } finally {
+      btn.disabled = false;
+      viewBtn.disabled = false;
+    }
+  }
+
+  function renderReader(images) {
+    const readerSection = document.getElementById('readerSection');
+    const readerImages = document.getElementById('readerImages');
+    readerImages.innerHTML = '';
+
+    images.forEach((src, i) => {
+      const img = document.createElement('img');
+      img.src = src;
+      img.loading = 'lazy';
+      img.alt = `صفحة ${i + 1}`;
+      readerImages.appendChild(img);
+
+      if ((i + 1) % 6 === 0 && i + 1 !== images.length) {
+        const ad = document.createElement('div');
+        ad.className = 'ad-slot ad-slot--inline';
+        ad.innerHTML = '<span class="ad-slot-label">مساحة إعلانية</span>';
+        readerImages.appendChild(ad);
+      }
+    });
+
+    readerSection.hidden = false;
+    readerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function closeReader() {
+    document.getElementById('readerSection').hidden = true;
+  }
+
+  function updateProgress(percent, iconId, text) {
+    const progressBar = document.getElementById('progressBar');
+    const status = document.getElementById('status');
+    progressBar.style.width = percent + '%';
+    progressBar.innerText = percent + '%';
+    status.className = 'status';
+    status.innerHTML = `<svg class="icon"><use href="#${iconId}"/></svg><span>${text}</span>`;
+  }
+
+  function setStatusError(message) {
+    const status = document.getElementById('status');
+    status.className = 'status status--error';
+    status.innerHTML = `<svg class="icon"><use href="#ic-alert"/></svg><span>خطأ: ${message}</span>`;
+  }
+</script>
+
+</body>
+</html>
