@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import * as cheerio from "cheerio";
 
@@ -90,7 +89,10 @@ function normalizeUrl(raw, baseUrl) {
     .replace(/\\u003d/gi, "=")
     .replace(/\\u002f/gi, "/")
     .replace(/\\\//g, "/")
-    .replace(/&amp;/gi, "&");
+    .replace(/\u0026/gi, "&")
+    .replace(/\u003f/gi, "?")
+    .replace(/\u003d/gi, "=")
+    .replace(/\u002f/gi, "/");
 
   // Remove whitespace
   value = value.split(/\s+/)[0];
@@ -336,8 +338,7 @@ function extractWithCheerio(
     // ==================================================
 
     $("source").each((_, element) => {
-      const src =
-        $(element).attr("src");
+      const src = $(element).attr("src");
 
       if (src) {
         addImage(
@@ -382,7 +383,6 @@ function extractWithCheerio(
         );
       }
     );
-
   } catch (error) {
     console.error(
       "❌ Cheerio extraction error:",
@@ -462,7 +462,7 @@ function extractWithRegex(
   // ==================================================
 
   const relativeRegex =
-    /["'`]([^"'`<>\\\s]+\.(?:jpg|jpeg|png|webp|avif|jfif)(?:\?[^"'`]*)?)["'`]/gi;
+    /["'`]([^"'`<>\\\s]+?\.(?:jpg|jpeg|png|webp|avif|jfif)(?:\?[^"'`]*)?)["'`]/gi;
 
   const relativeMatches =
     html.matchAll(relativeRegex);
@@ -507,7 +507,10 @@ function extractFromScripts(
         return;
       }
 
-      // Direct URLs
+      // ==================================================
+      // DIRECT URLS
+      // ==================================================
+
       const directRegex =
         /https?:\/\/[^"'\\\s]+/gi;
 
@@ -530,7 +533,10 @@ function extractFromScripts(
         );
       }
 
-      // Protocol-relative URLs
+      // ==================================================
+      // PROTOCOL-RELATIVE URLS
+      // ==================================================
+
       const protocolRegex =
         /\/\/[^"'\\\s]+/gi;
 
@@ -550,7 +556,6 @@ function extractFromScripts(
         );
       }
     });
-
   } catch (error) {
     console.error(
       "❌ Script extraction error:",
@@ -608,106 +613,78 @@ function detectSource(url) {
         .toLowerCase();
 
     if (
-      hostname.includes(
-        "mangatek"
-      )
+      hostname.includes("mangatek")
     ) {
       return "mangatek";
     }
 
     if (
-      hostname.includes(
-        "mangadex"
-      )
+      hostname.includes("mangadex")
     ) {
       return "mangadex";
     }
 
     if (
-      hostname.includes(
-        "manga-starz"
-      )
+      hostname.includes("manga-starz")
     ) {
       return "manga-starz";
     }
 
     if (
-      hostname.includes(
-        "mangalek"
-      )
+      hostname.includes("mangalek")
     ) {
       return "mangalek";
     }
 
     if (
-      hostname.includes(
-        "mangakakalot"
-      )
+      hostname.includes("mangakakalot")
     ) {
       return "mangakakalot";
     }
 
     if (
-      hostname.includes(
-        "manhuaplus"
-      )
+      hostname.includes("manhuaplus")
     ) {
       return "manhuaplus";
     }
 
     if (
-      hostname.includes(
-        "mangaraw"
-      )
+      hostname.includes("mangaraw")
     ) {
       return "mangaraw";
     }
 
     return "unknown";
-
   } catch {
     return "unknown";
   }
 }
 
 // ======================================================
-// JSON RESPONSE
+// JSON RESPONSE - VERCEL NODE.JS
 // ======================================================
 
-function json(
-  data,
-  status = 200
-) {
-  return new Response(
-    JSON.stringify(data),
-    {
-      status,
-
-      headers: {
-        "Content-Type":
-          "application/json; charset=utf-8",
-
-        "Access-Control-Allow-Origin":
-          "*",
-
-        "Access-Control-Allow-Methods":
-          "POST, OPTIONS",
-
-        "Access-Control-Allow-Headers":
-          "Content-Type",
-
-        "Cache-Control":
-          "no-store",
-      },
-    }
-  );
+function json(res, data, status = 200) {
+  return res
+    .status(status)
+    .json(data);
 }
 
 // ======================================================
 // HANDLER
 // ======================================================
+// IMPORTANT:
+// Vercel Node.js Functions use:
+// export default async function handler(req, res)
+//
+// NOT:
+// return new Response(...)
+// ======================================================
 
-export default async function handler(req) {
+export default async function handler(
+  req,
+  res
+) {
   const method =
     req.method || "GET";
 
@@ -721,8 +698,47 @@ export default async function handler(req) {
   // ====================================================
 
   if (method === "OPTIONS") {
-    return json({}, 200);
+    res.setHeader(
+      "Access-Control-Allow-Origin",
+      "*"
+    );
+
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "POST, OPTIONS"
+    );
+
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type"
+    );
+
+    return res.status(200).json({});
   }
+
+  // ====================================================
+  // CORS
+  // ====================================================
+
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "*"
+  );
+
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "POST, OPTIONS"
+  );
+
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type"
+  );
+
+  res.setHeader(
+    "Cache-Control",
+    "no-store"
+  );
 
   // ====================================================
   // POST ONLY
@@ -730,10 +746,10 @@ export default async function handler(req) {
 
   if (method !== "POST") {
     return json(
+      res,
       {
         success: false,
-        error:
-          "Method Not Allowed",
+        error: "Method Not Allowed",
         method,
       },
       405
@@ -744,20 +760,7 @@ export default async function handler(req) {
   // BODY
   // ====================================================
 
-  let body;
-
-  try {
-    body = await req.json();
-  } catch {
-    return json(
-      {
-        success: false,
-        error:
-          "Invalid JSON body",
-      },
-      400
-    );
-  }
+  const body = req.body || {};
 
   const chapterUrl =
     body?.chapterUrl;
@@ -771,6 +774,7 @@ export default async function handler(req) {
     typeof chapterUrl !== "string"
   ) {
     return json(
+      res,
       {
         success: false,
         error:
@@ -796,6 +800,7 @@ export default async function handler(req) {
       url.protocol !== "https:"
     ) {
       return json(
+        res,
         {
           success: false,
           error:
@@ -804,9 +809,9 @@ export default async function handler(req) {
         400
       );
     }
-
   } catch {
     return json(
+      res,
       {
         success: false,
         error:
@@ -836,13 +841,12 @@ export default async function handler(req) {
 
   if (!allowed) {
     return json(
+      res,
       {
         success: false,
         error:
           "Website not supported",
-
         hostname,
-
         allowedHosts:
           Array.from(
             allowedHosts
@@ -870,22 +874,26 @@ export default async function handler(req) {
       cacheKey
     );
 
-    return json({
-      success: true,
+    return json(
+      res,
+      {
+        success: true,
 
-      source:
-        detectSource(
-          cacheKey
-        ),
+        source:
+          detectSource(
+            cacheKey
+          ),
 
-      count:
-        cached.count,
+        count:
+          cached.count,
 
-      images:
-        cached.images,
+        images:
+          cached.images,
 
-      cached: true,
-    });
+        cached: true,
+      },
+      200
+    );
   }
 
   // ====================================================
@@ -959,6 +967,7 @@ export default async function handler(req) {
       response.status === 404
     ) {
       return json(
+        res,
         {
           success: false,
           error:
@@ -975,6 +984,7 @@ export default async function handler(req) {
       response.status === 403
     ) {
       return json(
+        res,
         {
           success: false,
           error:
@@ -990,6 +1000,7 @@ export default async function handler(req) {
       response.status >= 400
     ) {
       return json(
+        res,
         {
           success: false,
           error:
@@ -1024,6 +1035,7 @@ export default async function handler(req) {
       imageUrls.length === 0
     ) {
       return json(
+        res,
         {
           success: false,
 
@@ -1081,6 +1093,7 @@ export default async function handler(req) {
     // ==================================================
 
     return json(
+      res,
       {
         success: true,
 
@@ -1099,7 +1112,6 @@ export default async function handler(req) {
       },
       200
     );
-
   } catch (error) {
     console.error(
       "❌ EXTRACT ERROR:",
@@ -1117,6 +1129,7 @@ export default async function handler(req) {
         "ETIMEDOUT"
     ) {
       return json(
+        res,
         {
           success: false,
           error:
@@ -1135,6 +1148,7 @@ export default async function handler(req) {
       "ENOTFOUND"
     ) {
       return json(
+        res,
         {
           success: false,
           error:
@@ -1157,6 +1171,7 @@ export default async function handler(req) {
         "EAI_AGAIN"
     ) {
       return json(
+        res,
         {
           success: false,
           error:
@@ -1173,6 +1188,7 @@ export default async function handler(req) {
     // ==================================================
 
     return json(
+      res,
       {
         success: false,
 
