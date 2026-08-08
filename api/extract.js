@@ -1,4 +1,4 @@
-```js
+
 import axios from "axios";
 import * as cheerio from "cheerio";
 
@@ -80,8 +80,10 @@ function normalizeUrl(raw, baseUrl) {
 
   let value = raw.trim();
 
+  // Remove surrounding quotes
   value = value.replace(/^["'`]+|["'`]+$/g, "");
 
+  // Decode escaped URLs
   value = value
     .replace(/\\u0026/gi, "&")
     .replace(/\\u003f/gi, "?")
@@ -89,18 +91,21 @@ function normalizeUrl(raw, baseUrl) {
     .replace(/\\u002f/gi, "/")
     .replace(/\\\//g, "/");
 
+  // Decode literal unicode escape sequences
   value = value
     .replace(/\u0026/gi, "&")
     .replace(/\u003f/gi, "?")
     .replace(/\u003d/gi, "=")
     .replace(/\u002f/gi, "/");
 
+  // Remove whitespace
   value = value.split(/\s+/)[0];
 
   if (!value) {
     return null;
   }
 
+  // Protocol-relative URL
   if (value.startsWith("//")) {
     value = "https:" + value;
   }
@@ -209,12 +214,7 @@ function isGarbageImage(url) {
 // ADD IMAGE
 // ======================================================
 
-function addImage(
-  raw,
-  baseUrl,
-  images,
-  seen
-) {
+function addImage(raw, baseUrl, images, seen) {
   const url = normalizeUrl(
     raw,
     baseUrl
@@ -474,8 +474,10 @@ function extractWithRegex(
     html.matchAll(relativeRegex);
 
   for (const match of relativeMatches) {
+    const url = match[1];
+
     addImage(
-      match[1],
+      url,
       baseUrl,
       images,
       seen
@@ -667,48 +669,6 @@ function detectSource(url) {
   } catch {
     return "unknown";
   }
-}
-
-// ======================================================
-// SAFE DEBUG HEADERS
-// ======================================================
-
-function getDebugHeaders(headers) {
-  if (!headers) {
-    return {};
-  }
-
-  const importantHeaders = [
-    "server",
-    "content-type",
-    "content-length",
-    "location",
-    "cf-ray",
-    "cf-cache-status",
-    "x-cache",
-    "x-cache-status",
-    "x-powered-by",
-    "retry-after",
-    "set-cookie",
-    "via",
-    "date",
-  ];
-
-  const result = {};
-
-  for (const header of importantHeaders) {
-    const value =
-      headers[header];
-
-    if (value !== undefined) {
-      result[header] =
-        Array.isArray(value)
-          ? value
-          : String(value);
-    }
-  }
-
-  return result;
 }
 
 // ======================================================
@@ -948,17 +908,9 @@ export default async function handler(
   // ====================================================
 
   try {
-    const userAgent =
-      getRandomUserAgent();
-
     console.log(
       "🌐 Fetching:",
       cacheKey
-    );
-
-    console.log(
-      "🧭 User-Agent:",
-      userAgent
     );
 
     const response =
@@ -967,7 +919,7 @@ export default async function handler(
         {
           headers: {
             "User-Agent":
-              userAgent,
+              getRandomUserAgent(),
 
             "Referer":
               cacheKey,
@@ -983,9 +935,6 @@ export default async function handler(
 
             "Pragma":
               "no-cache",
-
-            "Upgrade-Insecure-Requests":
-              "1",
           },
 
           timeout: 15000,
@@ -1008,13 +957,6 @@ export default async function handler(
       response.status
     );
 
-    console.log(
-      "📍 Response Headers:",
-      getDebugHeaders(
-        response.headers
-      )
-    );
-
     const html =
       typeof response.data === "string"
         ? response.data
@@ -1026,7 +968,7 @@ export default async function handler(
     );
 
     // ==================================================
-    // HTTP 404
+    // HTTP ERRORS
     // ==================================================
 
     if (
@@ -1040,109 +982,27 @@ export default async function handler(
             "Chapter not found on the website",
           status:
             response.status,
-          source:
-            detectSource(
-              cacheKey
-            ),
         },
         404
       );
     }
 
-    // ==================================================
-    // HTTP 401 / 403
-    // ==================================================
-
     if (
       response.status === 401 ||
       response.status === 403
     ) {
-      const bodyPreview =
-        typeof response.data === "string"
-          ? response.data.slice(
-              0,
-              3000
-            )
-          : null;
-
-      console.log(
-        "🚫 WEBSITE BLOCKED REQUEST"
-      );
-
-      console.log(
-        "🚫 Status:",
-        response.status
-      );
-
-      console.log(
-        "🚫 Headers:",
-        getDebugHeaders(
-          response.headers
-        )
-      );
-
-      console.log(
-        "🚫 Body Preview:",
-        bodyPreview
-      );
-
       return json(
         res,
         {
           success: false,
-
           error:
             "The website blocked the request",
-
           status:
             response.status,
-
-          source:
-            detectSource(
-              cacheKey
-            ),
-
-          debug: {
-            requestUrl:
-              cacheKey,
-
-            finalUrl:
-              response.request
-                ?.res
-                ?.responseUrl ||
-              cacheKey,
-
-            status:
-              response.status,
-
-            statusText:
-              response.statusText ||
-              null,
-
-            contentType:
-              response.headers[
-                "content-type"
-              ] || null,
-
-            headers:
-              getDebugHeaders(
-                response.headers
-              ),
-
-            htmlLength:
-              html.length,
-
-            bodyPreview:
-              bodyPreview,
-          },
         },
-        response.status
+        403
       );
     }
-
-    // ==================================================
-    // OTHER HTTP ERRORS
-    // ==================================================
 
     if (
       response.status >= 400
@@ -1155,18 +1015,6 @@ export default async function handler(
             "Website returned an error",
           status:
             response.status,
-          source:
-            detectSource(
-              cacheKey
-            ),
-          debug: {
-            headers:
-              getDebugHeaders(
-                response.headers
-              ),
-            htmlLength:
-              html.length,
-          },
         },
         502
       );
@@ -1221,17 +1069,6 @@ export default async function handler(
                 ?.res
                 ?.responseUrl ||
               cacheKey,
-
-            headers:
-              getDebugHeaders(
-                response.headers
-              ),
-
-            bodyPreview:
-              html.slice(
-                0,
-                3000
-              ),
           },
         },
         404
@@ -1283,7 +1120,6 @@ export default async function handler(
       },
       200
     );
-
   } catch (error) {
     console.error(
       "❌ EXTRACT ERROR:",
@@ -1306,8 +1142,6 @@ export default async function handler(
           success: false,
           error:
             "Request timeout. The website took too long to respond.",
-          code:
-            error.code,
         },
         504
       );
@@ -1327,8 +1161,6 @@ export default async function handler(
           success: false,
           error:
             "Could not resolve the website hostname.",
-          code:
-            error.code,
         },
         400
       );
@@ -1374,13 +1206,9 @@ export default async function handler(
         details:
           error?.message ||
           "Unknown error",
-
-        code:
-          error?.code ||
-          null,
       },
       500
     );
   }
 }
-```
+
