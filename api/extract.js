@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import * as cheerio from "cheerio";
 
@@ -80,7 +79,7 @@ function normalizeUrl(raw, baseUrl) {
 
   let value = raw.trim();
 
-  // Remove surrounding quotes
+  // Remove quotes
   value = value.replace(/^["'`]+|["'`]+$/g, "");
 
   // Decode escaped URLs
@@ -91,13 +90,6 @@ function normalizeUrl(raw, baseUrl) {
     .replace(/\\u002f/gi, "/")
     .replace(/\\\//g, "/");
 
-  // Decode literal unicode escape sequences
-  value = value
-    .replace(/\u0026/gi, "&")
-    .replace(/\u003f/gi, "?")
-    .replace(/\u003d/gi, "=")
-    .replace(/\u002f/gi, "/");
-
   // Remove whitespace
   value = value.split(/\s+/)[0];
 
@@ -105,7 +97,7 @@ function normalizeUrl(raw, baseUrl) {
     return null;
   }
 
-  // Protocol-relative URL
+  // Protocol-relative
   if (value.startsWith("//")) {
     value = "https:" + value;
   }
@@ -214,7 +206,12 @@ function isGarbageImage(url) {
 // ADD IMAGE
 // ======================================================
 
-function addImage(raw, baseUrl, images, seen) {
+function addImage(
+  raw,
+  baseUrl,
+  images,
+  seen
+) {
   const url = normalizeUrl(
     raw,
     baseUrl
@@ -290,10 +287,7 @@ function extractWithCheerio(
   try {
     const $ = cheerio.load(html);
 
-    // ==================================================
     // IMG
-    // ==================================================
-
     $("img").each((_, element) => {
       const attributes = [
         "src",
@@ -338,10 +332,7 @@ function extractWithCheerio(
       );
     });
 
-    // ==================================================
     // SOURCE
-    // ==================================================
-
     $("source").each((_, element) => {
       const src =
         $(element).attr("src");
@@ -363,10 +354,7 @@ function extractWithCheerio(
       );
     });
 
-    // ==================================================
     // PICTURE
-    // ==================================================
-
     $("picture source").each(
       (_, element) => {
         const src =
@@ -414,10 +402,7 @@ function extractWithRegex(
     return images;
   }
 
-  // ==================================================
-  // DIRECT HTTPS URLS
-  // ==================================================
-
+  // Direct HTTPS URLs
   const directRegex =
     /https?:\/\/[^"'<>\\\s]+/gi;
 
@@ -440,10 +425,7 @@ function extractWithRegex(
     );
   }
 
-  // ==================================================
-  // PROTOCOL RELATIVE
-  // ==================================================
-
+  // Protocol relative
   const protocolRegex =
     /\/\/[^"'<>\\\s]+/gi;
 
@@ -463,10 +445,7 @@ function extractWithRegex(
     );
   }
 
-  // ==================================================
-  // RELATIVE IMAGE URLS
-  // ==================================================
-
+  // Relative images
   const relativeRegex =
     /["'`]([^"'`<>\\\s]+?\.(?:jpg|jpeg|png|webp|avif|jfif)(?:\?[^"'`]*)?)["'`]/gi;
 
@@ -474,10 +453,8 @@ function extractWithRegex(
     html.matchAll(relativeRegex);
 
   for (const match of relativeMatches) {
-    const url = match[1];
-
     addImage(
-      url,
+      match[1],
       baseUrl,
       images,
       seen
@@ -513,10 +490,7 @@ function extractFromScripts(
         return;
       }
 
-      // ==================================================
-      // DIRECT URLS
-      // ==================================================
-
+      // Direct URLs
       const directRegex =
         /https?:\/\/[^"'\\\s]+/gi;
 
@@ -539,10 +513,7 @@ function extractFromScripts(
         );
       }
 
-      // ==================================================
-      // PROTOCOL RELATIVE URLS
-      // ==================================================
-
+      // Protocol URLs
       const protocolRegex =
         /\/\/[^"'\\\s]+/gi;
 
@@ -562,10 +533,7 @@ function extractFromScripts(
         );
       }
 
-      // ==================================================
-      // RELATIVE IMAGE URLS
-      // ==================================================
-
+      // Relative images
       const relativeRegex =
         /["'`]([^"'`<>\\\s]+?\.(?:jpg|jpeg|png|webp|avif|jfif)(?:\?[^"'`]*)?)["'`]/gi;
 
@@ -683,6 +651,86 @@ function json(
   return res
     .status(status)
     .json(data);
+}
+
+// ======================================================
+// FETCH CHAPTER
+// ======================================================
+
+async function fetchChapter(
+  chapterUrl
+) {
+  const userAgent =
+    getRandomUserAgent();
+
+  console.log(
+    "🌐 HTTP GET:",
+    chapterUrl
+  );
+
+  console.log(
+    "🕵️ User-Agent:",
+    userAgent
+  );
+
+  const response =
+    await axios.get(
+      chapterUrl,
+      {
+        headers: {
+          "User-Agent":
+            userAgent,
+
+          "Accept":
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+
+          "Accept-Language":
+            "en-US,en;q=0.9",
+
+          "Accept-Encoding":
+            "gzip, deflate, br",
+
+          "Cache-Control":
+            "no-cache",
+
+          "Pragma":
+            "no-cache",
+
+          "Upgrade-Insecure-Requests":
+            "1",
+
+          "Sec-Fetch-Dest":
+            "document",
+
+          "Sec-Fetch-Mode":
+            "navigate",
+
+          "Sec-Fetch-Site":
+            "none",
+
+          "Sec-Fetch-User":
+            "?1",
+
+          "Referer":
+            chapterUrl,
+        },
+
+        timeout: 15000,
+
+        maxRedirects: 5,
+
+        maxContentLength:
+          10 * 1024 * 1024,
+
+        responseType:
+          "text",
+
+        validateStatus:
+          () => true,
+      }
+    );
+
+  return response;
 }
 
 // ======================================================
@@ -868,7 +916,7 @@ export default async function handler(
   }
 
   // ====================================================
-  // NORMALIZED CACHE KEY
+  // CACHE
   // ====================================================
 
   const cacheKey =
@@ -889,14 +937,18 @@ export default async function handler(
       res,
       {
         success: true,
+
         source:
           detectSource(
             cacheKey
           ),
+
         count:
           cached.count,
+
         images:
           cached.images,
+
         cached: true,
       },
       200
@@ -904,52 +956,13 @@ export default async function handler(
   }
 
   // ====================================================
-  // FETCH WEBSITE
+  // FETCH
   // ====================================================
 
   try {
-    console.log(
-      "🌐 Fetching:",
-      cacheKey
-    );
-
     const response =
-      await axios.get(
-        cacheKey,
-        {
-          headers: {
-            "User-Agent":
-              getRandomUserAgent(),
-
-            "Referer":
-              cacheKey,
-
-            "Accept":
-              "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-
-            "Accept-Language":
-              "en-US,en;q=0.9",
-
-            "Cache-Control":
-              "no-cache",
-
-            "Pragma":
-              "no-cache",
-          },
-
-          timeout: 15000,
-
-          maxRedirects: 5,
-
-          maxContentLength:
-            10 * 1024 * 1024,
-
-          responseType:
-            "text",
-
-          validateStatus:
-            () => true,
-        }
+      await fetchChapter(
+        cacheKey
       );
 
     console.log(
@@ -958,7 +971,8 @@ export default async function handler(
     );
 
     const html =
-      typeof response.data === "string"
+      typeof response.data ===
+      "string"
         ? response.data
         : "";
 
@@ -968,7 +982,7 @@ export default async function handler(
     );
 
     // ==================================================
-    // HTTP ERRORS
+    // 404
     // ==================================================
 
     if (
@@ -987,6 +1001,10 @@ export default async function handler(
       );
     }
 
+    // ==================================================
+    // 401 / 403
+    // ==================================================
+
     if (
       response.status === 401 ||
       response.status === 403
@@ -999,10 +1017,18 @@ export default async function handler(
             "The website blocked the request",
           status:
             response.status,
+          source:
+            detectSource(
+              cacheKey
+            ),
         },
         403
       );
     }
+
+    // ==================================================
+    // OTHER HTTP ERRORS
+    // ==================================================
 
     if (
       response.status >= 400
@@ -1021,7 +1047,7 @@ export default async function handler(
     }
 
     // ==================================================
-    // EXTRACT IMAGES
+    // EXTRACT
     // ==================================================
 
     const imageUrls =
@@ -1098,7 +1124,7 @@ export default async function handler(
 
     // ==================================================
     // RESPONSE
-    // ==================================================
+    // ====================================================
 
     return json(
       res,
@@ -1167,7 +1193,7 @@ export default async function handler(
     }
 
     // ==================================================
-    // NETWORK ERROR
+    // NETWORK
     // ==================================================
 
     if (
@@ -1192,7 +1218,7 @@ export default async function handler(
     }
 
     // ==================================================
-    // GENERIC ERROR
+    // GENERIC
     // ==================================================
 
     return json(
@@ -1211,4 +1237,3 @@ export default async function handler(
     );
   }
 }
-
