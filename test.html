@@ -1,0 +1,1230 @@
+<!DOCTYPE html><html lang="ar" dir="rtl"> <head><script>
+      // Pulse placeholder: installed synchronously so island modules that run
+      // before utils/pulse.js loads can still await the combined poll instead
+      // of falling back to their individual endpoints. Resolves null after 4s
+      // if the pulse never arrives (fallbacks then kick in).
+      (function(){var t;window.__pulsePromise=new Promise(function(r){window.__pulseResolve=function(d){clearTimeout(t);r(d)};t=setTimeout(function(){r(null)},4000);});})();
+    </script><script>
+    // CRITICAL: Set theme variables IMMEDIATELY, before any CSS loads
+    // This runs synchronously before any other resources are fetched
+    (function() {
+      var d = document.documentElement;
+      
+      function hexToHsl(hex) {
+        var r = 0, g = 0, b = 0;
+        if (hex.length === 4) { r = parseInt(hex[1] + hex[1], 16); g = parseInt(hex[2] + hex[2], 16); b = parseInt(hex[3] + hex[3], 16); }
+        else if (hex.length === 7) { r = parseInt(hex[1] + hex[2], 16); g = parseInt(hex[3] + hex[4], 16); b = parseInt(hex[5] + hex[6], 16); }
+        r /= 255; g /= 255; b /= 255;
+        var cmin = Math.min(r, g, b), cmax = Math.max(r, g, b), delta = cmax - cmin, h = 0, s = 0, l = 0;
+        if (delta !== 0) { if (cmax === r) h = ((g - b) / delta) % 6; else if (cmax === g) h = (b - r) / delta + 2; else h = (r - g) / delta + 4; }
+        h = Math.round(h * 60); if (h < 0) h += 360;
+        l = (cmax + cmin) / 2; s = delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+        return h + ' ' + (s * 100).toFixed(1) + '% ' + (l * 100).toFixed(1) + '%';
+      }
+      function darkenColor(hex, percent) {
+        var num = parseInt(hex.replace('#', ''), 16), amt = Math.round(2.55 * percent);
+        var R = Math.max((num >> 16) - amt, 0), G = Math.max((num >> 8 & 0xFF) - amt, 0), B = Math.max((num & 0xFF) - amt, 0);
+        return '#' + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
+      }
+      function hexToRgb(hex) {
+        var r = 0, g = 0, b = 0;
+        if (hex.length === 4) { r = parseInt(hex[1] + hex[1], 16); g = parseInt(hex[2] + hex[2], 16); b = parseInt(hex[3] + hex[3], 16); }
+        else if (hex.length === 7) { r = parseInt(hex[1] + hex[2], 16); g = parseInt(hex[3] + hex[4], 16); b = parseInt(hex[5] + hex[6], 16); }
+        return r + ', ' + g + ', ' + b;
+      }
+
+      // Get stored preferences
+      var storedColor = localStorage.getItem('themeColor') || '#E50914';
+      var storedMode = localStorage.getItem('themeMode');
+      var isDark = storedMode !== 'light';
+
+      // Preset dark variants for common colors
+      var presets = {
+        '#E50914': '#B20710', '#0EA5E9': '#0284C7', '#10B981': '#059669',
+        '#8B5CF6': '#7C3AED', '#EC4899': '#DB2777', '#F97316': '#EA580C',
+        '#EAB308': '#CA8A04', '#06B6D4': '#0891B2'
+      };
+      var darkColor = presets[storedColor] || darkenColor(storedColor, 20);
+      var hslValue = hexToHsl(storedColor);
+      var rgbValue = hexToRgb(storedColor);
+
+      // Apply theme class
+      d.classList.add(isDark ? 'dark' : 'light');
+
+      // 1. Apply CSS custom properties directly to :root (document.documentElement)
+      d.style.setProperty('--color-brand-primary', storedColor);
+      d.style.setProperty('--color-brand-primary-dark', darkColor);
+      d.style.setProperty('--color-brand-primary-hsl', hslValue);
+      d.style.setProperty('--color-brand-primary-rgb', rgbValue);
+      d.style.setProperty('--color-brand-red', storedColor);
+      d.style.setProperty('--color-brand-red-dark', darkColor);
+      
+      // 2. Inject a critical style tag to ensure variables are set even if inline styles get overridden
+      // This is crucial for preventing flash on data-heavy pages
+      var style = document.createElement('style');
+      style.id = 'theme-vars';
+      style.innerHTML = ':root { --color-brand-primary: ' + storedColor + ' !important; --color-brand-primary-dark: ' + darkColor + ' !important; --color-brand-primary-hsl: ' + hslValue + ' !important; --color-brand-primary-rgb: ' + rgbValue + ' !important; --color-brand-red: ' + storedColor + ' !important; --color-brand-red-dark: ' + darkColor + ' !important; }';
+      document.head.appendChild(style);
+    })();
+    </script><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="msvalidate.01" content="30F0B0F312C934F206AF910A379D6ABC"><meta name="google-site-verification" content="9BrmiBmN-rTPP_I3x-3itjxJ4aW2Wi6wvS2rbPl_dk4"><link rel="alternate" hreflang="ar" href="https://mangatek.com/reader/three-brothers/64"><link rel="alternate" hreflang="x-default" href="https://mangatek.com/reader/three-brothers/64"><link rel="icon" href="/Logo/logo.ico" type="image/x-icon"><link rel="apple-touch-icon" href="/Logo/mangatek_logo.png"><link rel="manifest" href="/manifest.webmanifest"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"><style type="text/css">@font-face {font-family:'Tajawal';font-style:normal;font-weight:400;src:url(/cf-fonts/s/tajawal/5.2.7/latin/400/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:'Tajawal';font-style:normal;font-weight:400;src:url(/cf-fonts/s/tajawal/5.2.7/arabic/400/normal.woff2);unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1;font-display:swap;}@font-face {font-family:'Tajawal';font-style:normal;font-weight:500;src:url(/cf-fonts/s/tajawal/5.2.7/latin/500/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:'Tajawal';font-style:normal;font-weight:500;src:url(/cf-fonts/s/tajawal/5.2.7/arabic/500/normal.woff2);unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1;font-display:swap;}@font-face {font-family:'Tajawal';font-style:normal;font-weight:700;src:url(/cf-fonts/s/tajawal/5.2.7/latin/700/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}@font-face {font-family:'Tajawal';font-style:normal;font-weight:700;src:url(/cf-fonts/s/tajawal/5.2.7/arabic/700/normal.woff2);unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1;font-display:swap;}@font-face {font-family:'Tajawal';font-style:normal;font-weight:800;src:url(/cf-fonts/s/tajawal/5.2.7/arabic/800/normal.woff2);unicode-range:U+0600-06FF,U+0750-077F,U+0870-088E,U+0890-0891,U+0897-08E1,U+08E3-08FF,U+200C-200E,U+2010-2011,U+204F,U+2E41,U+FB50-FDFF,U+FE70-FE74,U+FE76-FEFC,U+102E0-102FB,U+10E60-10E7E,U+10EC2-10EC4,U+10EFC-10EFF,U+1EE00-1EE03,U+1EE05-1EE1F,U+1EE21-1EE22,U+1EE24,U+1EE27,U+1EE29-1EE32,U+1EE34-1EE37,U+1EE39,U+1EE3B,U+1EE42,U+1EE47,U+1EE49,U+1EE4B,U+1EE4D-1EE4F,U+1EE51-1EE52,U+1EE54,U+1EE57,U+1EE59,U+1EE5B,U+1EE5D,U+1EE5F,U+1EE61-1EE62,U+1EE64,U+1EE67-1EE6A,U+1EE6C-1EE72,U+1EE74-1EE77,U+1EE79-1EE7C,U+1EE7E,U+1EE80-1EE89,U+1EE8B-1EE9B,U+1EEA1-1EEA3,U+1EEA5-1EEA9,U+1EEAB-1EEBB,U+1EEF0-1EEF1;font-display:swap;}@font-face {font-family:'Tajawal';font-style:normal;font-weight:800;src:url(/cf-fonts/s/tajawal/5.2.7/latin/800/normal.woff2);unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;font-display:swap;}</style><script async defer src="https://www.googletagmanager.com/gtag/js?id=G-W8MD69ZT8X"></script><script type="module">const c=d;(function(e,t){const n=d,s=e();for(;;)try{if(-parseInt(n(481))/1*(parseInt(n(483))/2)+parseInt(n(463))/3*(parseInt(n(466))/4)+parseInt(n(462))/5*(parseInt(n(475))/6)+-parseInt(n(456))/7*(parseInt(n(479))/8)+-parseInt(n(449))/9*(-parseInt(n(461))/10)+parseInt(n(450))/11+-parseInt(n(453))/12*(parseInt(n(478))/13)===t)break;s.push(s.shift())}catch{s.push(s.shift())}})(r,785346);const l=c(477),p=25*1e3;function x(){const e=c,t=document.cookie[e(455)](/(?:^|;\s*)auth=([^;]+)/);return t?decodeURIComponent(t[1]):null}async function f(){const e=c,t=x(),n={"x-app-source":e(484)};t&&(n.Authorization="Bearer "+t);const s=await fetch(l+e(476),{headers:n});if(!s.ok)throw new Error(e(473)+s.status);const a=await s[e(472)]();if(!a||!a[e(482)])throw new Error("pulse payload");return a[e(471)]}function i(){const e=x();return e?"u:"+e.slice(-16):"anon"}function r(){const e=["undefined","app:pulse","197572BVKBHa","catch","then","astro:page-load","dispatchEvent","data","json","pulse ","getItem","12BpbAeq","/session/pulse","https://api.mangatek.com/api","336557mTaTop","712YChoGs","setItem","409RvSjun","success","4956djOEjY","mangatek","loading","addEventListener","9bYJuki","10576159PDtsfi","pulseAt","__pulseInit","276IyNVCU","__pulsePromise","match","70546RpsXes","pulseAuth","now","__pulseResolve","readyState","10073430xkrCqm","1206860LsnEqb","51nVLqkJ"];return r=function(){return e},r()}function h(){const e=c;try{if(sessionStorage[e(474)](e(457))!==i())return null;const t=parseInt(sessionStorage.getItem(e(451))||"0",10);if(Date[e(458)]()-t>p)return null;const n=sessionStorage[e(474)]("pulseData");return n?JSON.parse(n):null}catch{return null}}function w(e){const t=c;try{sessionStorage[t(480)]("pulseAt",String(Date[t(458)]())),sessionStorage.setItem(t(457),i()),sessionStorage[t(480)]("pulseData",JSON.stringify(e))}catch{}}function I({force:e=!1}={}){const t=c,n=e?null:h(),s=n?Promise.resolve(n):f()[t(468)](o=>(w(o),o)),a=o=>{const u=t;try{window[u(459)]&&window.__pulseResolve(o)}catch{}};return window[t(454)]=s[t(467)](()=>null),s[t(468)](o=>{const u=t;a(o),document.dispatchEvent(new CustomEvent(u(465),{detail:o}))})[t(467)](()=>{const o=t;a(null),document[o(470)](new CustomEvent("app:pulse",{detail:null}))}),window.__pulsePromise}function m(){const e=c;try{sessionStorage.removeItem(e(451))}catch{}}typeof window!==c(464)&&(window.__bustPulseSession=m);function d(e,t){return e=e-447,r()[e]}function g(){const e=c;if(window[e(452)])return;window[e(452)]=!0;const t=()=>I();document[e(460)]===e(447)?document[e(448)]("DOMContentLoaded",t,{once:!0}):t(),document[e(448)](e(469),t)}g();</script><title>Three brothers الفصل 64 مترجم - مانجاتك</title><meta name="title" content="Three brothers الفصل 64 مترجم - مانجاتك"><meta name="description" content="اقرأ Three brothers الفصل 64 مترجم عربي كامل بجودة عالية أونلاين ومجاناً على مانجاتك، وتابع أحدث فصول Three brothers المترجمة أولاً بأول بدون إعلانات."><meta name="author" content="mangatek"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"><meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large"><meta name="bingbot" content="index, follow"><meta name="content-language" content="ar"><link rel="canonical" href="https://mangatek.com/reader/three-brothers/64"><link rel="prev" href="https://mangatek.com/reader/three-brothers/63"><link rel="next" href="https://mangatek.com/reader/three-brothers/65"><meta property="og:type" content="article"><meta property="og:url" content="https://mangatek.com/reader/three-brothers/64"><meta property="og:title" content="Three brothers الفصل 64 مترجم - مانجاتك"><meta property="og:description" content="اقرأ Three brothers الفصل 64 مترجم عربي كامل بجودة عالية أونلاين ومجاناً على مانجاتك، وتابع أحدث فصول Three brothers المترجمة أولاً بأول بدون إعلانات."><meta property="og:image" content="https://api.mangatek.com/covers/cover-1785010470958-446924865.webp"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:site_name" content="مانجاتك - Mangatek"><meta property="og:locale" content="ar_AR"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:url" content="https://mangatek.com/reader/three-brothers/64"><meta name="twitter:title" content="Three brothers الفصل 64 مترجم - مانجاتك"><meta name="twitter:description" content="اقرأ Three brothers الفصل 64 مترجم عربي كامل بجودة عالية أونلاين ومجاناً على مانجاتك، وتابع أحدث فصول Three brothers المترجمة أولاً بأول بدون إعلانات."><meta name="twitter:image" content="https://api.mangatek.com/covers/cover-1785010470958-446924865.webp"><script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"مانجاتك - Mangatek","alternateName":["Mangatek","مانجاتك"],"url":"https://mangatek.com/","logo":"https://mangatek.com/Logo/mangatek_logo.png","sameAs":["https://discord.gg/YU35cXTVej"],"contactPoint":{"@type":"ContactPoint","contactType":"customer service","availableLanguage":["Arabic","English"]}}</script><script type="application/ld+json">{"@context":"https://schema.org","inLanguage":"ar","@type":"ComicIssue","name":"Three brothers الفصل 64 مترجم - مانجاتك","headline":"Three brothers الفصل 64 مترجم - مانجاتك","description":"اقرأ Three brothers الفصل 64 مترجم عربي كامل بجودة عالية أونلاين ومجاناً على مانجاتك، وتابع أحدث فصول Three brothers المترجمة أولاً بأول بدون إعلانات.","url":"https://mangatek.com/reader/three-brothers/64","image":"https://api.mangatek.com/covers/cover-1785010470958-446924865.webp","author":{"@type":"Organization","name":"مانجاتك - Mangatek"},"publisher":{"@type":"Organization","name":"مانجاتك - Mangatek","logo":{"@type":"ImageObject","url":"https://mangatek.com/Logo/mangatek_logo.png"}},"datePublished":"2025","isAccessibleForFree":true,"mainEntityOfPage":{"@type":"WebPage","@id":"https://mangatek.com/reader/three-brothers/64"}}</script><script type="application/ld+json">{"@context":"https://schema.org","inLanguage":"ar","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"الرئيسية","item":"https://mangatek.com/"},{"@type":"ListItem","position":2,"name":"مانجا","item":"https://mangatek.com/manga-list"},{"@type":"ListItem","position":3,"name":"الفصل ","item":"https://mangatek.com/reader/three-brothers/64"}]}</script><meta name="theme-color" content="#0a0a0f"><script type="text/javascript" data-cfasync="false">
+        /*<![CDATA[/* */
+        (function(){var k=window,b="ca65738cb8598e981a70064f9b871b45",z=[["siteId",915*882*921-738094628],["minBid",0],["popundersPerIP","0"],["delayBetween",0],["default",false],["defaultPerDay",0],["topmostLayer","always"]],f=["d3d3LnhhZHNtYXJ0LmNvbS9yQkkvU1Zrdm4vdm1vLm1pbi5qcw==","ZDExZW5xMnJ5bXkweWwuY2xvdWRmcm9udC5uZXQvY2pzb24yLm1pbi5qcw=="],e=-1,c,p,o=function(){clearTimeout(p);e++;if(f[e]&&!(1776621138000<(new Date).getTime()&&1<e)){c=k.document.createElement("script");c.type="text/javascript";c.async=!0;var s=k.document.getElementsByTagName("script")[0];c.src="https://"+atob(f[e]);c.crossOrigin="anonymous";c.onerror=o;c.onload=function(){clearTimeout(p);k[b.slice(0,16)+b.slice(0,16)]||o()};p=setTimeout(o,5E3);s.parentNode.insertBefore(c,s)}};if(!k[b]){try{Object.freeze(k[b]=z)}catch(e){}o()}})();
+        /*]]>/* */
+        </script><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4265615880550564" crossorigin="anonymous"></script><link rel="stylesheet" href="/_astro/about.BmX19Rky.css">
+<style>body{font-family:Tajawal,Arial,sans-serif}.floating-animation[data-astro-cid-pxli64he]{animation:floating 3s ease-in-out infinite}.pulse-slow[data-astro-cid-pxli64he]{animation:pulse 3s cubic-bezier(.4,0,.6,1) infinite}.fade-in-up[data-astro-cid-pxli64he]{animation:fadeInUp .8s ease-out forwards;opacity:0;transform:translateY(30px)}.fade-in-up-delay[data-astro-cid-pxli64he]{animation:fadeInUp .8s ease-out .3s forwards;opacity:0;transform:translateY(30px)}.fade-in-up-delay-2[data-astro-cid-pxli64he]{animation:fadeInUp .8s ease-out .6s forwards;opacity:0;transform:translateY(30px)}.glow-effect[data-astro-cid-pxli64he]{box-shadow:0 0 20px #e509144d;transition:box-shadow .3s ease}.glow-effect[data-astro-cid-pxli64he]:hover{box-shadow:0 0 30px #e5091480}.discord-hover[data-astro-cid-pxli64he]:hover{transform:translateY(-2px);box-shadow:0 10px 25px #dc26264d}@keyframes floating{0%,to{transform:translateY(0)}50%{transform:translateY(-20px)}}@keyframes fadeInUp{to{opacity:1;transform:translateY(0)}}.bg-gradient-custom[data-astro-cid-pxli64he]{background:linear-gradient(135deg,#0f0000,#1a0505,#2b0b0b)}.text-gradient[data-astro-cid-pxli64he]{background:linear-gradient(135deg,#ef4444,#dc2626);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+</style>
+<link rel="stylesheet" href="/_astro/latest.DZSF5J0f.css">
+<link rel="stylesheet" href="/_astro/_chapter_.DJZ-jIEs.css">
+<style>@keyframes gradient{0%,to{opacity:.2}50%{opacity:.4}}.animate-gradient[data-astro-cid-pxjg5jkk]{animation:gradient 8s ease-in-out infinite}@keyframes pulse-slow{0%,to{opacity:.5}50%{opacity:.75}}.animate-pulse-slow[data-astro-cid-pxjg5jkk]{animation:pulse-slow 3s ease-in-out infinite}@keyframes bounce-slow{0%,to{transform:translateY(0)}50%{transform:translateY(-5px)}}.animate-bounce-slow[data-astro-cid-pxjg5jkk]{animation:bounce-slow 2s ease-in-out infinite}@supports ((-webkit-backdrop-filter: blur(20px)) or (backdrop-filter: blur(20px))){.backdrop-blur-xl[data-astro-cid-pxjg5jkk]{-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}}
+</style></head> <body class="min-h-screen flex flex-col font-arabic antialiased relative" style="background-color: var(--color-bg-primary); color: var(--color-text-primary);"> <div id="gift-received-overlay" class="fixed inset-0 z-[99999] hidden" data-astro-cid-mwgz7csn> <div class="gift-backdrop absolute inset-0 bg-black/85 backdrop-blur-md" data-astro-cid-mwgz7csn></div> <canvas id="gift-confetti-canvas" class="absolute inset-0 pointer-events-none" data-astro-cid-mwgz7csn></canvas> <div class="gift-overlay-content relative z-10 flex items-center justify-center min-h-screen p-4" data-astro-cid-mwgz7csn> <div class="gift-modal w-full max-w-md text-center" data-astro-cid-mwgz7csn> <div class="gift-glow-ring mx-auto mb-6 relative" data-astro-cid-mwgz7csn> <div class="gift-glow-pulse" data-astro-cid-mwgz7csn></div> <div id="gift-icon-circle" class="gift-icon-circle" data-astro-cid-mwgz7csn> <i id="gift-icon" class="fas fa-gift text-4xl text-white" data-astro-cid-mwgz7csn></i> </div> </div> <h2 id="gift-title" class="text-3xl font-bold text-white mb-3" style="font-family: 'Tajawal', sans-serif; text-shadow: 0 0 30px rgba(212, 175, 55, 0.4);" data-astro-cid-mwgz7csn>
+🎉 لقد حصلت على هدية!
+</h2> <p id="gift-sender" class="text-lg mb-4" style="color: #d4af37; font-family: 'Tajawal', sans-serif;" data-astro-cid-mwgz7csn>
+من إدارة الموقع
+</p> <div class="gift-details-card mx-auto mb-6" data-astro-cid-mwgz7csn> <div class="gift-item-info" data-astro-cid-mwgz7csn> <div id="gift-item-icon" class="gift-item-icon-wrapper" data-astro-cid-mwgz7csn> <i class="fas fa-coins text-2xl" data-astro-cid-mwgz7csn></i> </div> <div class="gift-item-text" data-astro-cid-mwgz7csn> <span id="gift-item-name" class="gift-item-name" data-astro-cid-mwgz7csn>هدية</span> <span id="gift-item-desc" class="gift-item-desc" data-astro-cid-mwgz7csn>تم إرسالها إليك كهدية</span> </div> </div> </div> <p id="gift-message" class="text-gray-300 text-sm mb-8 leading-relaxed max-w-xs mx-auto" style="font-family: 'Tajawal', sans-serif;" data-astro-cid-mwgz7csn>
+تمتع بهذه الهدية! يمكنك مشاهدتها في حسابك.
+</p> <div class="flex flex-col gap-3 max-w-xs mx-auto" data-astro-cid-mwgz7csn> <button id="gift-accept-btn" class="gift-accept-btn" data-astro-cid-mwgz7csn> <i class="fas fa-check-circle" data-astro-cid-mwgz7csn></i> <span data-astro-cid-mwgz7csn>استلام الهدية</span> </button> <a id="gift-action-link" href="/profile" class="gift-action-link-btn" style="display:none;" data-astro-cid-mwgz7csn> <i class="fas fa-arrow-left" data-astro-cid-mwgz7csn></i> <span id="gift-action-text" data-astro-cid-mwgz7csn>عرض</span> </a> </div> <div class="gift-sparkles" data-astro-cid-mwgz7csn> <div class="sparkle s1" data-astro-cid-mwgz7csn>✦</div> <div class="sparkle s2" data-astro-cid-mwgz7csn>✧</div> <div class="sparkle s3" data-astro-cid-mwgz7csn>⭐</div> <div class="sparkle s4" data-astro-cid-mwgz7csn>✦</div> <div class="sparkle s5" data-astro-cid-mwgz7csn>✧</div> <div class="sparkle s6" data-astro-cid-mwgz7csn>⭐</div> </div> </div> </div> </div>  <script type="module" src="/_astro/GiftReceivedOverlay.astro_astro_type_script_index_0_lang.B51Rps5i.js"></script> <div id="admin-broadcast-overlay" class="fixed inset-0 z-[99998] hidden" data-variant="message" data-astro-cid-6uzk4dhv> <div class="ab-backdrop absolute inset-0 bg-black/85 backdrop-blur-md" data-astro-cid-6uzk4dhv></div> <div class="ab-content relative z-10 flex items-center justify-center min-h-screen p-4" data-astro-cid-6uzk4dhv> <div class="ab-modal w-full max-w-md text-center" data-astro-cid-6uzk4dhv> <div class="ab-glow-ring mx-auto mb-6 relative" data-astro-cid-6uzk4dhv> <div class="ab-glow-pulse" data-astro-cid-6uzk4dhv></div> <div class="ab-icon-circle" data-astro-cid-6uzk4dhv> <i id="ab-icon" class="fas fa-envelope-open-text text-4xl text-white" data-astro-cid-6uzk4dhv></i> </div> </div> <h2 id="ab-title" class="text-3xl font-bold text-white mb-3" style="font-family: 'Tajawal', sans-serif;" data-astro-cid-6uzk4dhv>
+رسالة من الإدارة
+</h2> <p id="ab-sender" class="text-base mb-4 ab-sender" style="font-family: 'Tajawal', sans-serif;" data-astro-cid-6uzk4dhv>
+من إدارة الموقع
+</p> <div class="ab-message-card mx-auto mb-6" data-astro-cid-6uzk4dhv> <p id="ab-message" class="ab-message-text" style="font-family: 'Tajawal', sans-serif;" data-astro-cid-6uzk4dhv>
+نص الرسالة
+</p> </div> <div class="flex flex-col gap-3 max-w-xs mx-auto" data-astro-cid-6uzk4dhv> <button id="ab-accept-btn" class="ab-accept-btn" data-astro-cid-6uzk4dhv> <i class="fas fa-check-circle" data-astro-cid-6uzk4dhv></i> <span id="ab-accept-text" data-astro-cid-6uzk4dhv>حسنًا</span> </button> <a id="ab-link-btn" href="#" class="ab-link-btn" style="display:none;" data-astro-cid-6uzk4dhv> <i class="fas fa-arrow-left" data-astro-cid-6uzk4dhv></i> <span data-astro-cid-6uzk4dhv>عرض المزيد</span> </a> </div> </div> </div> </div>  <script type="module" src="/_astro/AdminBroadcastOverlay.astro_astro_type_script_index_0_lang.DA-vfdoc.js"></script>  <div id="shop-update-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 hidden transition-opacity duration-300"> <div class="bg-[var(--color-bg-elevated,#1f1f1f)] border border-[var(--color-border-main,#333)] rounded-lg shadow-[0_10px_40px_rgba(0,0,0,0.6)] w-[90%] max-w-md p-0 text-white animate-fade-in relative overflow-hidden group"> <div class="absolute top-0 left-0 right-0 h-1 bg-[var(--color-brand-primary,#E50914)]"></div> <button id="shop-update-close" class="absolute top-4 left-4 text-gray-400 hover:text-white text-xl z-10 transition-colors w-8 h-8 flex items-center justify-center rounded-full hover:bg-white/10"> <i class="fas fa-times"></i> </button> <div class="p-8 text-center bg-gradient-to-b from-[var(--color-bg-elevated,#1f1f1f)] to-[#141414]"> <div class="w-20 h-20 bg-[var(--color-brand-primary,#E50914)]/10 text-[var(--color-brand-primary,#E50914)] rounded-full flex items-center justify-center mx-auto mb-6 border border-[var(--color-brand-primary,#E50914)]/20 shadow-[0_0_30px_rgba(229,9,20,0.15)] group-hover:scale-110 transition-transform duration-500"> <i class="fas fa-store text-3xl drop-shadow-lg"></i> </div> <h2 class="text-2xl font-bold text-white mb-3 tracking-wide">
+تحديث جديد في المتجر
+</h2> <p class="text-gray-400 text-sm leading-relaxed max-w-xs mx-auto mb-8">
+اكتشف العناصر الحصرية والجديدة التي تمت إضافتها للتو. لا تفوت الفرصة!
+</p> <a href="/store" id="go-to-store-btn" class="flex items-center justify-center gap-3 w-full py-3.5 bg-[var(--color-brand-primary,#E50914)] text-white rounded hover:bg-[var(--color-brand-primary-dark,#b20710)] font-bold transition-all shadow-lg hover:shadow-[0_0_25px_rgba(229,9,20,0.4)] text-lg"> <i class="fas fa-shopping-cart"></i> <span>تصفح المتجر الآن</span> </a> </div> </div> </div> <script type="module" src="/_astro/ShopUpdateNotification.astro_astro_type_script_index_0_lang.Cy5gOWyY.js"></script> <div id="mission-completed-toast" class="fixed bottom-6 right-6 z-[9999] hidden transition-all duration-300 pointer-events-none" data-astro-cid-ux45bpdy> <div class="mission-toast-content pointer-events-auto bg-[var(--color-bg-elevated,#1f1f1f)] border border-[var(--color-border-main,#333)] rounded-xl shadow-[0_10px_40px_rgba(0,0,0,0.6)] w-80 text-white relative overflow-hidden transform translate-y-10 opacity-0 transition-all duration-500 hover:scale-[1.02]" data-astro-cid-ux45bpdy> <div class="absolute inset-0 overflow-hidden pointer-events-none" data-astro-cid-ux45bpdy> <div class="particle particle-1" data-astro-cid-ux45bpdy></div> <div class="particle particle-2" data-astro-cid-ux45bpdy></div> <div class="particle particle-3" data-astro-cid-ux45bpdy></div> </div> <div class="absolute top-0 bottom-0 right-0 w-1 bg-gradient-to-b from-[var(--color-brand-primary,#E50914)] to-[var(--color-brand-primary-dark,#b20710)]" data-astro-cid-ux45bpdy></div> <button id="mission-toast-close" class="absolute top-2 left-2 text-gray-400 hover:text-white text-sm z-20 transition-all w-6 h-6 flex items-center justify-center rounded-full hover:bg-white/10" data-astro-cid-ux45bpdy> <i class="fas fa-times" data-astro-cid-ux45bpdy></i> </button> <div class="p-4 flex items-center gap-4 relative z-10" data-astro-cid-ux45bpdy> <div class="shrink-0 relative" data-astro-cid-ux45bpdy> <div class="absolute inset-0 bg-[var(--color-brand-primary,#E50914)]/20 rounded-full animate-ping-slow" data-astro-cid-ux45bpdy></div> <div class="relative w-12 h-12 bg-gradient-to-br from-[var(--color-brand-primary,#E50914)] to-[var(--color-brand-primary-dark,#b20710)] rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(229,9,20,0.3)]" data-astro-cid-ux45bpdy> <i class="fas fa-trophy text-lg text-white" data-astro-cid-ux45bpdy></i> </div> </div> <div class="grow min-w-0" data-astro-cid-ux45bpdy> <div id="mission-type-badge" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold mb-1 bg-amber-500/20 text-amber-400 border border-amber-500/30" data-astro-cid-ux45bpdy> <i class="fas fa-star text-[9px]" data-astro-cid-ux45bpdy></i> <span id="mission-type-text" data-astro-cid-ux45bpdy>مهمة</span> </div> <h3 class="font-bold text-white text-sm leading-tight truncate" data-astro-cid-ux45bpdy> <span id="mission-title" data-astro-cid-ux45bpdy>تم إنجاز المهمة!</span> </h3> <div class="flex items-center gap-1 mt-1" data-astro-cid-ux45bpdy> <span class="text-xs text-gray-400" data-astro-cid-ux45bpdy>المكافأة:</span> <i class="fas fa-coins text-amber-400 text-xs" data-astro-cid-ux45bpdy></i> <span id="mission-points" class="font-bold text-amber-400 text-sm" data-astro-cid-ux45bpdy>100</span> </div> </div> </div> <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-700/50" data-astro-cid-ux45bpdy> <div id="mission-progress-bar" class="h-full bg-[var(--color-brand-primary,#E50914)] w-full origin-right transition-transform duration-[5000ms] linear" data-astro-cid-ux45bpdy></div> </div> </div> </div>  <script type="module">const x=m;(function(t,e){const n=m,o=t();for(;;)try{if(-parseInt(n(147))/1*(parseInt(n(152))/2)+parseInt(n(135))/3+parseInt(n(132))/4+-parseInt(n(126))/5*(parseInt(n(142))/6)+parseInt(n(136))/7+-parseInt(n(141))/8+parseInt(n(154))/9===e)break;o.push(o.shift())}catch{o.push(o.shift())}})(d,213012);function d(){const t=["188432CIchah","185034NRSeLm","inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold mb-1 border ","pointsReward","DOMContentLoaded","mission-type-badge","6QJdxCj","transition","addEventListener","يومي","scaleX(1)","75134vbVfZV","لم تُحتسب النقاط: حظر مؤقت بسبب تشغيل/إيقاف مانع الإعلانات بشكل متكرر","1711692pvkSsv","/sounds/mission-complete.mp3","mission-completed-toast","add","catch","textContent","mission-title","hidden","getElementById","mission-blocked-warning","classList","text","30SoQNJL","أسبوعي","mission-toast-close","closest","missionCompleted","show","861444WLnFyc","insertAdjacentElement","style","663582fRUhib","141813egZrTo","title","لم تُحتسب النقاط لأن مانع الإعلانات مفعل","mission-type-text","ms linear"];return d=function(){return t},d()}let l=null;function m(t,e){return t=t-120,d()[t]}const f=5e3,b={DAILY:{text:x(150),class:"bg-blue-500/20 text-blue-400 border-blue-500/30"},WEEKLY:{text:x(127),class:"bg-purple-500/20 text-purple-400 border-purple-500/30"},ACHIEVEMENT:{text:"إنجاز",class:"bg-amber-500/20 text-amber-400 border-amber-500/30"}};function I(t){const e=x,n=document[e(122)](e(156)),o=document.getElementById(e(146)),r=document[e(122)](e(139)),g=document.getElementById(e(120)),u=document[e(122)]("mission-points"),a=document.getElementById("mission-progress-bar");if(!n||!t)return;const p=b[t.type]||b.DAILY;o.className=e(143)+p.class,r.textContent=p[e(125)],g.textContent=t[e(137)]||"مهمة مكتملة";const c=t.pointsBlocked===!0;u[e(159)]=c?0:t[e(144)]||0;let s=document[e(122)](e(123));if(c?(!s&&(s=document.createElement("p"),s.id=e(123),s.className="text-[10px] text-red-400 font-bold mt-1 leading-tight",u[e(129)]("div")?.[e(133)]("afterend",s)),s.textContent=t.blockReason==="repeat_lockout"?e(153):e(138),s[e(124)].remove("hidden")):s&&s.classList.add(e(121)),a&&(a.style[e(148)]="none",a[e(134)].transform=e(151)),n[e(124)].remove("hidden"),requestAnimationFrame(()=>{requestAnimationFrame(()=>{const i=m;n.classList.add(i(131)),a&&(a.style.transition="transform "+f+i(140),a[i(134)].transform="scaleX(0)")})}),!c)try{const i=new Audio(e(155));i.volume=.2,i.play()[e(158)](()=>{})}catch{}l&&clearTimeout(l),l=setTimeout(h,f)}function h(){const t=x,e=document.getElementById("mission-completed-toast");e&&(e[t(124)].remove("show"),setTimeout(()=>{const n=t;e.classList[n(157)]("hidden")},500))}document[x(149)](x(145),()=>{const t=x;document[t(122)](t(128))?.addEventListener("click",h)}),document.addEventListener(x(130),t=>{const e=t.detail;e&&setTimeout(()=>{I(e)},500)});</script> <div id="new-chapter-toast" class="fixed bottom-4 right-4 z-[80] hidden opacity-0 translate-y-2 transition-all duration-300 ease-out max-w-[20rem] w-[calc(100vw-2rem)] sm:w-80" dir="rtl"> <div class="bg-[#181818] border border-zinc-800 rounded-lg shadow-2xl overflow-hidden"> <div class="flex items-start gap-3 p-4"> <div class="flex-shrink-0 w-9 h-9 rounded-full bg-zinc-800 flex items-center justify-center"> <i class="fas fa-book-open text-zinc-300"></i> </div> <div class="flex-1 min-w-0"> <div class="text-xs text-zinc-500 mb-1">فصل جديد متاح</div> <p id="new-chapter-toast-msg" class="text-sm text-white leading-snug mb-3 line-clamp-2"></p> <a id="new-chapter-toast-cta" href="#" class="inline-block px-3 py-1.5 text-xs font-bold text-white rounded transition-colors" style="background-color: var(--color-brand-primary, #E50914);">اقرأ الآن</a> </div> <button id="new-chapter-toast-close" aria-label="إغلاق" class="flex-shrink-0 text-zinc-500 hover:text-white transition-colors p-1"> <i class="fas fa-times"></i> </button> </div> </div> </div> <script type="module">function x(s,c){return s=s-388,u()[s]}(function(s,c){const n=x,a=s();for(;;)try{if(-parseInt(n(412))/1+parseInt(n(405))/2*(parseInt(n(416))/3)+parseInt(n(406))/4*(parseInt(n(399))/5)+-parseInt(n(419))/6*(-parseInt(n(420))/7)+-parseInt(n(389))/8+-parseInt(n(397))/9+-parseInt(n(408))/10===c)break;a.push(a.shift())}catch{a.push(a.shift())}})(u,265986),function(){const s=x,c="https://api.mangatek.com";function n(){const t=x;if(typeof document===t(398))return null;const o=document[t(421)].match(/(?:^|;\s*)auth=([^;]+)/);return o?decodeURIComponent(o[1]):null}async function a(){const t=x,o=document[t(409)]("new-chapter-toast");if(!o)return;const d=n();if(!d)return;let i=null;try{const e=window.__pulsePromise?await window[t(418)]:null;if(e&&e[t(414)])i=e[t(414)].toast&&e.notifications.toast[t(411)]?e[t(414)].toast[t(401)]:null;else{const w=await fetch(c+"/api/notifications/unseen-toast",{headers:{Authorization:t(388)+d}});if(!w.ok)return;const l=await w.json();i=l&&l[t(411)]?l[t(401)]:null}}catch{return}if(!i)return;const m=document[t(409)]("new-chapter-toast-msg"),r=document.getElementById(t(400)),p=document.getElementById(t(403));m&&(m.textContent=i.message||"فصل جديد متاح"),r&&i[t(394)]&&r[t(410)]("href",i[t(394)]),o.classList.remove(t(417)),requestAnimationFrame(()=>{const e=t;o[e(407)].remove("opacity-0",e(390))});let h=!1;const f=()=>{const e=t;h||(h=!0,o.classList[e(404)](e(422),"translate-y-2"),setTimeout(()=>o.classList.add("hidden"),300),window.__bustPulseSession&&window.__bustPulseSession(),fetch(c+"/api/notifications/"+i.id+e(395),{method:"POST",headers:{Authorization:"Bearer "+d}})[e(393)](()=>{}))};p&&p.addEventListener(t(391),f),r&&r[t(415)]("click",f),setTimeout(f,12e3)}document[s(402)]===s(396)?document.addEventListener(s(413),a,{once:!0}):a(),document.addEventListener(s(392),a)}();function u(){const s=["getElementById","setAttribute","success","471636bGhvZb","DOMContentLoaded","notifications","addEventListener","117esOxfL","hidden","__pulsePromise","6702HixbAP","1827GJrBDo","cookie","opacity-0","Bearer ","833928HnwkDr","translate-y-2","click","astro:page-load","catch","link","/toast-shown","loading","78714fRFWej","undefined","2970vLmpfv","new-chapter-toast-cta","data","readyState","new-chapter-toast-close","add","25922RTqfQG","2840vFmYxv","classList","3681470OqbEHL"];return u=function(){return s},u()}</script> <div id="ad-bait-primary" class="pub_300x250 pub_300x250m pub_728x90 text-ad textAd text_ad text_ads text-ads text-ad-links ad-unit" style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; z-index: -1; pointer-events: none; background: transparent;">&nbsp;</div><div id="ad-bait-secondary" class="adsbox doubleclick ad-placeholder ad-badge banner-ad ad-container" style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; z-index: -1; pointer-events: none; background: transparent;">&nbsp;</div><div id="ad-bait-tertiary" class="adsbygoogle google-ads ad-wrapper sponsored-content ad-slot" style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; z-index: -1; pointer-events: none; background: transparent;">&nbsp;</div><div id="ad-bait-banner" class="banner_ad advertising ad-frame ad-block ad-300" style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; z-index: -1; pointer-events: none; background: transparent;">&nbsp;</div><div id="adblock-overlay" class="fixed inset-0 z-[9999] hidden" style="direction: ltr;"><div class="absolute inset-0 bg-black/90 backdrop-blur-md"></div><div class="relative z-10 w-full h-full flex items-center justify-center p-4"><div class="w-full max-w-md" style="margin: 0 auto;"><div class="bg-zinc-900 rounded-2xl p-6 md:p-8 border border-zinc-800 shadow-2xl" style="direction: rtl; text-align: center;"><div class="flex justify-center mb-5"><div class="w-16 h-16 rounded-full bg-zinc-800 border-2 border-orange-500/50 flex items-center justify-center"><i class="fas fa-coins text-3xl text-orange-400"></i></div></div><h2 class="text-xl md:text-2xl font-bold text-red-500 mb-2">
+انتبه: نظام النقاط معطل
+</h2><p class="text-gray-300 text-sm mb-4">
+لقد اكتشفنا أنك تستخدم
+<span id="blocker-type" class="text-orange-400 font-bold">مانع إعلانات</span>.
+          يمكنك تصفح الموقع بحرية، ولكن <span class="text-red-400 font-bold underline">لن يتم احتساب أي نقاط</span> من المهام أثناء تفعيله.
+</p><div class="bg-red-900/20 border border-red-900/50 rounded-lg p-4 mb-4 text-right"><p class="text-red-400 text-sm font-bold mb-2"><i class="fas fa-exclamation-triangle ml-1"></i>
+تنبيه هام جداً:
+</p><p class="text-gray-300 text-xs leading-relaxed">
+عند تعطيل مانع الإعلانات، <span class="text-white font-bold underline">ستحتاج للانتظار 24 ساعة كاملة</span> قبل أن تتمكن من كسب النقاط مجدداً.
+</p><p class="text-gray-400 text-[10px] mt-2 opacity-75">
+تم وضع هذا الشرط الصارم لمنع التلاعب بالنظام (مثل الإيقاف المؤقت فقط عند الحاجة للنقاط).
+</p></div><div id="brave-instructions" class="hidden mb-4 p-3 bg-zinc-800/50 rounded-lg text-right border border-zinc-700/50"><p class="text-gray-300 text-xs"><span class="text-orange-400 font-semibold">Brave:</span>
+اضغط على الأسد ← أوقف Shields ← أعد التحميل
+</p></div><div id="adblock-instructions" class="hidden mb-4 p-3 bg-zinc-800/50 rounded-lg text-right border border-zinc-700/50"><p class="text-gray-300 text-xs"><span class="text-orange-400 font-semibold">إضافة الحجب:</span>
+اضغط عليها ← أوقف للموقع ← أعد التحميل
+</p></div><div class="flex gap-2 mb-3"><button id="refresh-page-btn" class="flex-1 py-2.5 px-3 bg-zinc-700 hover:bg-zinc-600 text-white font-medium rounded-lg transition-all text-sm flex items-center justify-center gap-2"><i class="fas fa-check text-green-400"></i><span>تم التعطيل</span></button><button id="continue-anyway-btn" class="flex-1 py-2.5 px-3 bg-zinc-800 hover:bg-zinc-700 text-gray-300 hover:text-white border border-zinc-600 rounded-lg transition-all text-sm flex items-center justify-center gap-2"><span>لا، أرفض</span><span id="countdown" class="text-orange-400 text-xs">(5)</span></button></div><p class="text-green-400/80 text-xs mb-3"><i class="fas fa-arrow-left ml-1"></i>
+بإمكانك متابعة تصفح الموقع بدون مشاكل
+</p><a href="/store" class="block w-full py-2 px-4 text-gray-500 hover:text-gray-300 text-xs transition-colors"><i class="fas fa-gem ml-1"></i>
+أو اشترِ ميزة إزالة الإعلانات من المتجر
+</a></div></div></div></div><style>
+/* Overlay Animation */
+#adblock-overlay.show {
+  display: flex !important;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#adblock-overlay.show > .relative > div {
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 640px) {
+  #adblock-overlay .max-w-md {
+    max-width: 100%;
+  }
+}
+</style><script type="module" src="/_astro/AdblockDetector.astro_astro_type_script_index_0_lang.OpAOzDPx.js"></script> <div id="gift-reward-btn" class="fixed left-6 z-40 hidden transition-all duration-300 translate-y-2 hover:translate-y-0 bottom-24" data-is-reader="true" data-astro-cid-yzccprjy> <button id="open-gift-overlay" class="relative flex items-center justify-center w-12 h-12 bg-[#181818] border border-zinc-800 hover:border-[var(--color-brand-primary,#E50914)] rounded-full text-gray-400 hover:text-white transition-all duration-300 shadow-lg hover:shadow-xl" aria-label="Rewards" data-astro-cid-yzccprjy> <i class="fas fa-gift text-lg" data-astro-cid-yzccprjy></i> <span id="gift-badge" class="absolute -top-1 -right-1 w-5 h-5 bg-[var(--color-brand-primary,#E50914)] rounded-full flex items-center justify-center text-[10px] text-white font-bold" data-astro-cid-yzccprjy>
+0
+</span> </button> </div> <div id="gift-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 hidden opacity-0 transition-opacity duration-300" data-astro-cid-yzccprjy> <div id="gift-overlay-content" class="relative w-[90%] max-w-md mx-4 bg-[#181818] border border-zinc-800 rounded-lg shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 max-h-[80vh] overflow-y-auto" data-astro-cid-yzccprjy> <div class="h-0.5 bg-gradient-to-r from-[var(--color-brand-primary,#E50914)] to-[#5865F2]" data-astro-cid-yzccprjy></div> <button id="close-gift-overlay" class="absolute top-3 left-3 w-8 h-8 rounded-full hover:bg-zinc-800 flex items-center justify-center text-gray-500 hover:text-white transition-colors z-10" data-astro-cid-yzccprjy> <i class="fas fa-times" data-astro-cid-yzccprjy></i> </button> <div class="p-6 pt-10" data-astro-cid-yzccprjy> <div class="text-center mb-6" data-astro-cid-yzccprjy> <div class="w-14 h-14 bg-gradient-to-br from-[var(--color-brand-primary,#E50914)] to-[#5865F2] rounded-full flex items-center justify-center mx-auto mb-4" data-astro-cid-yzccprjy> <i class="fas fa-gift text-2xl text-white" data-astro-cid-yzccprjy></i> </div> <h2 class="text-xl font-bold text-white" data-astro-cid-yzccprjy>مكافآت مجانية!</h2> <p class="text-gray-400 text-sm mt-1" data-astro-cid-yzccprjy>اكمل المهام التالية واحصل على نقاط مجانية</p> </div> <div id="login-warning" class="hidden mb-4 p-3 bg-orange-900/30 border border-orange-500/30 rounded text-orange-300 text-sm text-center" data-astro-cid-yzccprjy> <i class="fas fa-exclamation-triangle ml-2" data-astro-cid-yzccprjy></i>
+يجب عليك <a href="/login" class="underline font-bold" data-astro-cid-yzccprjy>تسجيل الدخول</a> للحصول على النقاط
+</div> <div id="missions-list" class="space-y-3" data-astro-cid-yzccprjy> <div class="text-center text-gray-500 py-4" data-astro-cid-yzccprjy> <i class="fas fa-spinner fa-spin text-lg" data-astro-cid-yzccprjy></i> <p class="text-sm mt-2" data-astro-cid-yzccprjy>جاري التحميل...</p> </div> </div> <div id="verification-container" class="hidden mt-4" data-astro-cid-yzccprjy> <div class="flex items-center justify-center gap-3 text-gray-400" data-astro-cid-yzccprjy> <div class="verification-spinner" data-astro-cid-yzccprjy></div> <span id="verification-text" data-astro-cid-yzccprjy>جاري التحقق...</span> </div> </div> <div id="success-container" class="hidden mt-4 p-4 bg-green-900/30 border border-green-500/30 rounded text-center" data-astro-cid-yzccprjy> <i class="fas fa-check-circle text-green-400 text-3xl mb-2" data-astro-cid-yzccprjy></i> <p class="text-green-300 font-bold" id="success-message" data-astro-cid-yzccprjy>تم إضافة النقاط بنجاح!</p> </div> <div class="mt-6 pt-4 border-t border-zinc-800 text-center" data-astro-cid-yzccprjy> <button id="reject-offers-btn" class="text-white hover:text-gray-300 text-sm transition-colors" data-astro-cid-yzccprjy> <i class="fas fa-eye-slash ml-1" data-astro-cid-yzccprjy></i>
+لا أريد هذه العروض الآن
+</button> </div> </div> </div> </div> <div id="reject-confirm-overlay" class="fixed inset-0 bg-black/90 flex items-center justify-center z-[60] hidden opacity-0 transition-opacity duration-300" data-astro-cid-yzccprjy> <div id="reject-confirm-content" class="relative w-[90%] max-w-sm mx-4 bg-[#181818] border border-zinc-800 rounded-lg shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" data-astro-cid-yzccprjy> <div class="h-0.5" style="background-color: var(--color-brand-primary, #E50914);" data-astro-cid-yzccprjy></div> <div class="p-6 text-center" data-astro-cid-yzccprjy> <div class="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style="background-color: rgba(var(--color-brand-primary-rgb, 229, 9, 20), 0.2);" data-astro-cid-yzccprjy> <i class="fas fa-eye-slash text-2xl" style="color: var(--color-brand-primary, #E50914);" data-astro-cid-yzccprjy></i> </div> <h3 class="text-lg font-bold text-white mb-2" data-astro-cid-yzccprjy>إخفاء العروض؟</h3> <p class="text-gray-400 text-sm mb-6" data-astro-cid-yzccprjy>سيتم إخفاء هذه العروض لمدة 24 ساعة. يمكنك العودة لها في أي وقت من صفحة المهام.</p> <div class="flex gap-3" data-astro-cid-yzccprjy> <button id="confirm-reject-btn" class="flex-1 py-2.5 text-white rounded font-bold text-sm transition-colors hover:opacity-90" style="background-color: var(--color-brand-primary, #E50914);" data-astro-cid-yzccprjy> <i class="fas fa-check ml-1" data-astro-cid-yzccprjy></i>
+نعم، إخفاء
+</button> <button id="cancel-reject-btn" class="flex-1 py-2.5 bg-zinc-700 hover:bg-zinc-600 text-white rounded font-bold text-sm transition-colors" data-astro-cid-yzccprjy> <i class="fas fa-times ml-1" data-astro-cid-yzccprjy></i>
+إلغاء
+</button> </div> </div> </div> </div>  <script type="module" src="/_astro/DiscordPromotion.astro_astro_type_script_index_0_lang.rlpcY2AB.js"></script> <script>(function(){const isLoggedIn = false;
+const isReaderPage = true;
+
+  // define:vars scripts cannot use ES imports, so the tiny cookie + token
+  // helper is inlined here instead of pulled from ../utils/apiClient.js.
+  const readAuthCookie = () => {
+    const m = document.cookie.match(/(?:^|;\s*)auth=([^;]+)/);
+    return m ? decodeURIComponent(m[1]) : null;
+  };
+  const resolveAuthToken = () =>
+    localStorage.getItem('auth_token') ||
+    localStorage.getItem('token') ||
+    readAuthCookie();
+
+  const API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:3001/api'
+    : 'https://api.mangatek.com/api';
+
+  let missionsData = [];
+  let missionIds = []; // Track mission IDs to detect new missions
+  
+  document.addEventListener('DOMContentLoaded', async () => {
+    const giftBtn = document.getElementById('gift-reward-btn');
+    const badge = document.getElementById('gift-badge');
+    const overlay = document.getElementById('gift-overlay');
+    const openBtn = document.getElementById('open-gift-overlay');
+    const closeBtn = document.getElementById('close-gift-overlay');
+    const loginWarning = document.getElementById('login-warning');
+    const missionsList = document.getElementById('missions-list');
+    const verificationContainer = document.getElementById('verification-container');
+    const verificationText = document.getElementById('verification-text');
+    const successContainer = document.getElementById('success-container');
+    const successMessage = document.getElementById('success-message');
+    const rejectBtn = document.getElementById('reject-offers-btn');
+    
+    // Check if user rejected offers (24h hide)
+    const rejectedUntil = localStorage.getItem('gift_offers_rejected_until');
+    const lastMissionIds = localStorage.getItem('gift_last_mission_ids');
+    
+    // Fetch link-click missions — cached in sessionStorage for 10 min. This
+    // component runs on EVERY page, and the per-navigation fetch alone was
+    // ~20% of all api.mangatek origin traffic; missions change rarely, and
+    // completing one clears the cache below so the badge stays accurate.
+    const MISSIONS_CACHE_KEY = 'gift_missions_cache_v1';
+    const MISSIONS_CACHE_TTL = 10 * 60 * 1000;
+    try {
+      const token = resolveAuthToken();
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+      let data = null;
+      // Missions ride on the combined pulse when available (same body).
+      try {
+        const pulse = window.__pulsePromise ? await window.__pulsePromise : null;
+        if (pulse && pulse.missions && pulse.missions.success) data = pulse.missions;
+      } catch (_) { /* fall through */ }
+      if (!data) {
+        try {
+          const cached = JSON.parse(sessionStorage.getItem(MISSIONS_CACHE_KEY) || 'null');
+          // keyed by auth state: the logged-in response carries isCompleted flags
+          if (cached && Date.now() - cached.at < MISSIONS_CACHE_TTL && cached.auth === !!token) {
+            data = cached.data;
+          }
+        } catch (_) { /* corrupt cache -> refetch */ }
+      }
+
+      if (!data) {
+        const res = await fetch(`${API_BASE}/missions/link-click`, { headers });
+        data = await res.json();
+        try {
+          sessionStorage.setItem(MISSIONS_CACHE_KEY, JSON.stringify({ at: Date.now(), auth: !!token, data }));
+        } catch (_) { /* storage full/blocked -> just skip caching */ }
+      }
+      
+      if (data.success && data.available) {
+        missionsData = data.missions;
+        missionIds = data.missions.map(m => m.id).sort().join(',');
+        const availableCount = data.missions.filter(m => !m.isCompleted).length;
+        
+        // Check if we should show (not rejected, or new missions added)
+        const isRejected = rejectedUntil && Date.now() < parseInt(rejectedUntil);
+        const hasNewMissions = lastMissionIds !== missionIds;
+        
+        // Only show if there are actual available missions
+        if (availableCount > 0 && (!isRejected || hasNewMissions)) {
+          giftBtn.classList.remove('hidden');
+          badge.textContent = availableCount;
+          
+          // Clear rejection if new missions were added
+          if (hasNewMissions) {
+            localStorage.removeItem('gift_offers_rejected_until');
+            localStorage.setItem('gift_last_mission_ids', missionIds);
+          }
+          
+          // Show login warning if not logged in
+          // Use multiple sources: API response, server-side isLoggedIn, and token check
+          const authToken = token; // Use the resolved token
+          const userIsLoggedIn = data.isLoggedIn || isLoggedIn || !!authToken;
+          
+          if (!userIsLoggedIn) {
+            loginWarning.classList.remove('hidden');
+          }
+        }
+        
+        // Determine logged in status for rendering (reuse same logic)
+        const userLoggedIn = data.isLoggedIn || isLoggedIn || !!token;
+        renderMissions(data.missions, userLoggedIn);
+      } else {
+        missionsList.innerHTML = `
+          <div class="text-center text-gray-500 py-4">
+            <i class="fas fa-gift text-2xl mb-2"></i>
+            <p class="text-sm">لا توجد مهام متاحة حالياً</p>
+          </div>
+        `;
+      }
+    } catch (error) {
+      console.error('Failed to fetch link-click missions:', error);
+      missionsList.innerHTML = `
+        <div class="text-center text-red-400 py-4">
+          <i class="fas fa-exclamation-circle text-2xl mb-2"></i>
+          <p class="text-sm">حدث خطأ في التحميل</p>
+        </div>
+      `;
+    }
+    
+    // Reader page scroll behavior
+    if (isReaderPage && giftBtn) {
+      let lastScrollY = 0;
+      let scrollUpDistance = 0;
+      
+      window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY; // or pageYOffset matches Layout
+        
+        if (currentScrollY < lastScrollY) {
+            // User is scrolling UP
+            scrollUpDistance += (lastScrollY - currentScrollY);
+        } else {
+            // User is scrolling DOWN
+            scrollUpDistance = 0;
+        }
+
+        // Show button only if:
+        // 1. We are deep enough in the page (> 300px)
+        // 2. User has scrolled up significantly (> 500px) to avoid accidental triggers
+        // Matches Layout.astro behavior
+        if (currentScrollY > 300 && scrollUpDistance > 500) {
+            giftBtn.classList.remove('scroll-hidden');
+        } else {
+            giftBtn.classList.add('scroll-hidden');
+        }
+        
+        lastScrollY = Math.max(0, currentScrollY);
+      }, { passive: true });
+    }
+    
+    // Reject offers button - show confirmation
+    const rejectConfirmOverlay = document.getElementById('reject-confirm-overlay');
+    const confirmRejectBtn = document.getElementById('confirm-reject-btn');
+    const cancelRejectBtn = document.getElementById('cancel-reject-btn');
+    
+    function showRejectConfirm() {
+      rejectConfirmOverlay.classList.remove('hidden');
+      setTimeout(() => rejectConfirmOverlay.classList.add('show'), 10);
+    }
+    
+    function hideRejectConfirm() {
+      rejectConfirmOverlay.classList.remove('show');
+      setTimeout(() => {
+        rejectConfirmOverlay.classList.add('hidden');
+      }, 300);
+    }
+    
+    rejectBtn?.addEventListener('click', () => {
+      showRejectConfirm();
+    });
+    
+    cancelRejectBtn?.addEventListener('click', () => {
+      hideRejectConfirm();
+    });
+    
+    confirmRejectBtn?.addEventListener('click', () => {
+      // Hide for 24 hours
+      const hideUntil = Date.now() + (24 * 60 * 60 * 1000);
+      localStorage.setItem('gift_offers_rejected_until', hideUntil.toString());
+      localStorage.setItem('gift_last_mission_ids', missionIds);
+      
+      giftBtn.classList.add('hidden');
+      hideRejectConfirm();
+      hideOverlay();
+    });
+    
+    rejectConfirmOverlay?.addEventListener('click', (e) => {
+      if (e.target === rejectConfirmOverlay) hideRejectConfirm();
+    });
+    
+    // Escape untrusted (admin/API) values before injecting into innerHTML strings.
+    // NOTE: must be a hoisted `function` declaration, NOT a `const` — renderMissions()
+    // is called from the fetch try-block ABOVE this point, and a `const` here would
+    // still be in its temporal dead zone at that moment (ReferenceError → the
+    // "حدث خطأ في التحميل" bug).
+    function esc(s) {
+      return String(s ?? '')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function renderMissions(missions, userLoggedIn) {
+      missionsList.innerHTML = missions.map(mission => {
+        const isExternalVisit = mission.actionType === 'EXTERNAL_VISIT';
+        const isDiscord = mission.linkUrl?.includes('discord');
+        const icon = isExternalVisit ? 'fas fa-globe' : isDiscord ? 'fab fa-discord' : 'fas fa-external-link';
+        const iconBg = isExternalVisit ? 'bg-green-600' : isDiscord ? 'bg-[#5865F2]' : 'bg-[var(--color-brand-primary,#E50914)]';
+        const durationMin = mission.minDurationSeconds ? Math.round(mission.minDurationSeconds / 60) : 5;
+
+        return `
+          <div class="mission-card ${mission.isCompleted ? 'completed' : ''}" data-mission-id="${mission.id}" data-action-type="${mission.actionType || 'LINK_CLICK'}">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 ${iconBg} rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="${icon} text-white"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-white text-sm">${esc(mission.title)}</h3>
+                ${isExternalVisit ? `<p class="text-gray-500 text-[10px] mt-0.5">زر الموقع واستخدمه لمدة ${durationMin} دقائق</p>` : ''}
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-yellow-500 font-bold text-sm">+${esc(mission.pointsReward)}</span>
+                  <i class="fas fa-coins text-yellow-500 text-xs"></i>
+                </div>
+              </div>
+              ${mission.isCompleted ? `
+                <div class="text-green-400">
+                  <i class="fas fa-check-circle text-xl"></i>
+                </div>
+              ` : isExternalVisit ? `
+                <button
+                  class="ev-start-btn px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs rounded transition-colors"
+                  data-mission-id="${mission.id}"
+                  ${!userLoggedIn ? 'disabled title="يجب تسجيل الدخول أولاً"' : ''}
+                >
+                  <i class="fas fa-play ml-1"></i>
+                  ابدأ
+                </button>
+              ` : `
+                <div class="flex gap-2">
+                  <a href="${esc(mission.linkUrl || '#')}" target="_blank" rel="noopener noreferrer"
+                     class="visit-link px-3 py-1.5 bg-zinc-700 hover:bg-zinc-600 text-white text-xs rounded transition-colors"
+                     data-mission-id="${mission.id}">
+                    <i class="fas fa-external-link ml-1"></i>
+                    زيارة
+                  </a>
+                  <div
+                    role="button"
+                    class="claim-btn px-3 py-1.5 bg-zinc-800 text-gray-500 text-xs rounded transition-colors min-w-[80px] flex items-center justify-center cursor-not-allowed select-none"
+                    data-mission-id="${mission.id}"
+                    data-visited="false"
+                    data-disabled="true"
+                    title="${!userLoggedIn ? 'يجب تسجيل الدخول أولاً' : ''}"
+                  >
+                    <i class="fas fa-coins ml-1"></i>
+                    مطالبة
+                  </div>
+                </div>
+              `}
+            </div>
+            ${isExternalVisit && !mission.isCompleted ? `
+              <div class="ev-progress hidden mt-3 pt-3 border-t border-zinc-700" data-mission-id="${mission.id}">
+                <div class="flex items-center gap-2 text-gray-400 text-xs">
+                  <div class="verification-spinner"></div>
+                  <span class="ev-status-text">جاري التحقق من الاستخدام...</span>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }).join('');
+      
+      // Add click listeners for visit links
+      document.querySelectorAll('.visit-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const missionId = this.getAttribute('data-mission-id');
+          // Store visit timestamp (removed as per request to reset on refresh)
+          // const now = Date.now();
+          // localStorage.setItem(`mission_visited_time_${missionId}`, now.toString());
+
+          if (!userLoggedIn) return;
+
+          const claimBtn = document.querySelector(`.claim-btn[data-mission-id="${missionId}"]`);
+          if (!claimBtn) return;
+          
+          startCountdown(claimBtn, 20);
+        });
+      });
+      
+      function startCountdown(btn, seconds) {
+          // Prevent multiple intervals
+          if (btn.dataset.interval) return;
+          
+          let secondsLeft = seconds;
+          let lastTick = Date.now();
+          
+          // Set disabled state
+          btn.setAttribute('data-disabled', 'true');
+          btn.classList.add('cursor-not-allowed', 'bg-zinc-800', 'text-gray-500');
+          btn.classList.remove('cursor-pointer', 'bg-[var(--color-brand-primary,#E50914)]', 'text-white', 'hover:opacity-90');
+          
+          // Initial text
+          btn.innerHTML = `<span class="text-[10px]">يرجى الانتظار...</span>`;
+          
+          const interval = setInterval(() => {
+            const now = Date.now();
+            const delta = now - lastTick;
+            lastTick = now;
+            
+            // Smart Pause Logic:
+            // 1. If user is looking at the tab (hasFocus) AND the browser was running smoothly (delta < 2s),
+            //    we assume they are staring at the button -> PAUSE.
+            // 2. If user was away (blurred) OR browser was suspended (delta > 2s, common on mobile when switching apps),
+            //    we assume they were doing the task -> COUNT DOWN.
+            if (document.hasFocus() && delta < 2000) {
+                 return;
+            }
+
+            // Decrement by actual elapsed seconds (handles suspension jumps)
+            secondsLeft -= (delta / 1000);
+            
+            if (secondsLeft <= 0) {
+              clearInterval(interval);
+              delete btn.dataset.interval;
+              enableClaimButton(btn);
+            } else {
+               // Keep showing wait message without seconds
+               btn.innerHTML = `<span class="text-[10px]">يرجى الانتظار...</span>`;
+            }
+          }, 1000);
+          
+          btn.dataset.interval = interval;
+      }
+      
+      function enableClaimButton(btn) {
+          btn.setAttribute('data-disabled', 'false');
+          btn.dataset.visited = 'true'; // Update data attribute
+          
+          // Update styling
+          btn.classList.remove('cursor-not-allowed', 'bg-zinc-800', 'text-gray-500');
+          btn.classList.add('cursor-pointer', 'bg-[var(--color-brand-primary,#E50914)]', 'hover:opacity-90', 'text-white');
+          
+          btn.innerHTML = `<i class="fas fa-coins ml-1"></i> مطالبه`;
+      }
+      
+      // Removed check for previously visited missions (lines 451-473) so button resets on refresh
+      
+      // Add external visit start button listeners
+      document.querySelectorAll('.ev-start-btn').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const token = resolveAuthToken();
+          if (!token) { window.location.href = '/login'; return; }
+
+          const missionId = this.getAttribute('data-mission-id');
+          this.disabled = true;
+          this.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+          try {
+            const res = await fetch(`${API_BASE}/promotions/external-visit/start`, {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ missionId: parseInt(missionId) })
+            });
+            const data = await res.json();
+            if (data.success) {
+              // Open external site with token
+              window.open(data.targetUrl, '_blank');
+
+              // Show progress indicator
+              const progressEl = document.querySelector(`.ev-progress[data-mission-id="${missionId}"]`);
+              if (progressEl) progressEl.classList.remove('hidden');
+              this.innerHTML = '<i class="fas fa-hourglass-half ml-1"></i> قيد التنفيذ';
+              this.classList.replace('bg-green-600', 'bg-zinc-700');
+              this.classList.replace('hover:bg-green-700', 'hover:bg-zinc-600');
+
+              // Poll for completion
+              const evToken = data.token;
+              const pollInterval = setInterval(async () => {
+                try {
+                  const statusRes = await fetch(`${API_BASE}/promotions/external-visit/status?token=${evToken}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                  });
+                  const statusData = await statusRes.json();
+                  if (statusData.status === 'COMPLETED') {
+                    clearInterval(pollInterval);
+                    const card = document.querySelector(`.mission-card[data-mission-id="${missionId}"]`);
+                    markMissionAsCompleted(card, 'تم إكمال المهمة!');
+                    const currentCount = Math.max(0, parseInt(badge.textContent || '0') - 1);
+                    badge.textContent = currentCount;
+                    if (currentCount <= 0) {
+                      setTimeout(() => { giftBtn.classList.add('hidden'); hideOverlay(); }, 3000);
+                    }
+                  } else if (statusData.status === 'EXPIRED') {
+                    clearInterval(pollInterval);
+                    if (progressEl) {
+                      progressEl.querySelector('.ev-status-text').textContent = 'انتهت صلاحية الجلسة';
+                    }
+                  }
+                } catch (e) { /* ignore poll errors */ }
+              }, 15000); // Poll every 15 seconds
+
+              // Stop polling after 35 minutes
+              setTimeout(() => clearInterval(pollInterval), 35 * 60 * 1000);
+            } else {
+              window.__notify?.(data.message || 'حدث خطأ', 'error');
+              this.disabled = false;
+              this.innerHTML = '<i class="fas fa-play ml-1"></i> ابدأ';
+            }
+          } catch (err) {
+            console.error('Start external visit error:', err);
+            this.disabled = false;
+            this.innerHTML = '<i class="fas fa-play ml-1"></i> ابدأ';
+          }
+        });
+      });
+
+      // Add claim button listeners
+      document.querySelectorAll('.claim-btn').forEach(btn => {
+        btn.addEventListener('click', async function(e) {
+          e.preventDefault(); 
+          e.stopPropagation();
+          
+          // Check disabled state via attribute
+          if (this.getAttribute('data-disabled') === 'true') return;
+          
+          const token = resolveAuthToken();
+          if (!token) {
+            window.location.href = '/login';
+            return;
+          }
+          
+          const missionId = this.getAttribute('data-mission-id');
+          await claimMission(missionId);
+        });
+      });
+    }
+    
+    async function claimMission(missionId) {
+      const missionCard = document.querySelector(`[data-mission-id="${missionId}"].mission-card`);
+      
+      // Hide mission card controls temporarily or show loading state inside card?
+      // Current design: hide card, show global verification container.
+      if (missionCard) missionCard.style.display = 'none';
+      verificationContainer.classList.remove('hidden');
+      
+      // Fake verification steps
+      const steps = [
+        'جاري التحقق...',
+        'التحقق من الزيارة...',
+        'تأكيد المهمة...',
+        'جاري إضافة النقاط...'
+      ];
+      
+      for (let i = 0; i < steps.length; i++) {
+        verificationText.textContent = steps[i];
+        await new Promise(r => setTimeout(r, 700));
+      }
+      
+      // Make API call
+      try {
+        const token = resolveAuthToken();
+
+        const res = await fetch(`${API_BASE}/missions/link-click/complete`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ missionId: parseInt(missionId) })
+        });
+        
+        const data = await res.json();
+        
+        verificationContainer.classList.add('hidden');
+        
+        if (data.success) {
+          // Completion changes isCompleted flags — drop the 10-min cache so
+          // the next page load refetches the accurate list.
+          try { sessionStorage.removeItem('gift_missions_cache_v1'); } catch (_) {}
+          successContainer.classList.remove('hidden');
+          successMessage.innerHTML = `تم إضافة <span class="text-yellow-400 font-bold">${esc(data.pointsAwarded)}</span> نقطة!<br>رصيدك الجديد: ${esc(data.newBalance)}`;
+          
+          // Update badge
+          const currentCount = Math.max(0, parseInt(badge.textContent || '0') - 1);
+          badge.textContent = currentCount;
+          
+          if (currentCount <= 0) {
+            // Hide the main button if no missions left
+            const giftBtn = document.getElementById('gift-reward-btn');
+            if (giftBtn) {
+                setTimeout(() => {
+                    giftBtn.classList.add('hidden');
+                    hideOverlay(); // Also close overlay since nothing left
+                }, 4000); // Wait for success animation to finish (3s + buffer)
+            }
+          }
+          localStorage.removeItem(`mission_visited_${missionId}`);
+          localStorage.removeItem(`mission_visited_time_${missionId}`);
+          
+          // Instead of reloading, mark completed visually
+          setTimeout(() => {
+            successContainer.classList.add('hidden');
+            markMissionAsCompleted(missionCard, data.mission.title);
+          }, 3000); 
+          
+        } else {
+          if (data.alreadyCompleted) {
+            // It's already done, just update the UI to reflect that without error
+            verificationContainer.classList.add('hidden');
+            markMissionAsCompleted(missionCard, "المهمة مكتملة");
+            
+            // Show a small toast
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-blue-900 border border-blue-500 text-white px-6 py-3 rounded-lg shadow-xl z-[70] flex items-center gap-3 animate-fade-in-down';
+            toast.innerHTML = `<i class="fas fa-info-circle text-xl"></i> <span>لقد أكملت هذه المهمة مسبقاً</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+            
+          } else {
+            // Generic error
+            if (missionCard) missionCard.style.display = '';
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-900 border border-red-500 text-white px-6 py-3 rounded-lg shadow-xl z-[70] flex items-center gap-3 animate-fade-in-down';
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-circle text-xl"></i> <span>${data.message || 'حدث خطأ'}</span>`;
+            document.body.appendChild(errorDiv);
+            setTimeout(() => errorDiv.remove(), 4000);
+          }
+        }
+      } catch (error) {
+        console.error('Claim error:', error);
+        verificationContainer.classList.add('hidden');
+        if (missionCard) missionCard.style.display = '';
+        
+        // Show error in a nicer way
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 bg-red-900 border border-red-500 text-white px-6 py-3 rounded-lg shadow-xl z-[70] flex items-center gap-3 animate-fade-in-down';
+        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle text-xl"></i> <span>حدث خطأ في الاتصال</span>`;
+        document.body.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 4000);
+      }
+    }
+
+    // Helper to mark card as completed
+    function markMissionAsCompleted(missionCard, title) {
+        if (!missionCard) return;
+        missionCard.style.display = '';
+        missionCard.classList.add('completed', 'opacity-60');
+        // Disable buttons inside
+        const buttons = missionCard.querySelectorAll('button, a');
+        buttons.forEach(b => b.style.pointerEvents = 'none');
+        
+        missionCard.innerHTML = `
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-green-900 rounded-full flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-check text-green-400"></i>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-white text-sm line-through text-gray-400">${esc(title)}</h3>
+                <div class="text-green-400 text-xs mt-1">
+                  مكتملة
+                </div>
+              </div>
+              <div class="text-green-400">
+                <i class="fas fa-check-circle text-xl"></i>
+              </div>
+            </div>
+        `;
+    }
+    
+    function showOverlay() {
+      overlay.classList.remove('hidden');
+      setTimeout(() => overlay.classList.add('show'), 10);
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function hideOverlay() {
+      overlay.classList.remove('show');
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 300);
+    }
+    
+    openBtn?.addEventListener('click', showOverlay);
+    closeBtn?.addEventListener('click', hideOverlay);
+    
+    overlay?.addEventListener('click', (e) => {
+      if (e.target === overlay) hideOverlay();
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !overlay.classList.contains('hidden')) hideOverlay();
+    });
+  });
+})();</script> <header data-site-nav class="fixed top-0 left-0 right-0 z-[70] transition-all duration-300 bg-gradient-to-b from-black/80 to-transparent" id="main-navbar" data-astro-cid-353qvbhl> <div class="container mx-auto px-6 max-w-[1400px]" data-astro-cid-353qvbhl> <div id="navbar-row" class="flex items-center justify-between h-16 gap-4" data-astro-cid-353qvbhl> <div class="flex items-center gap-8" data-astro-cid-353qvbhl> <a href="/" class="shrink-0 flex items-center gap-2 group" data-astro-cid-353qvbhl> <span class="text-3xl font-black tracking-tighter group-hover:scale-105 transition-transform" style="color: var(--color-brand-primary, #E50914);" data-astro-cid-353qvbhl>MANGATEK</span> </a> <nav class="hidden lg:flex items-center gap-6" data-astro-cid-353qvbhl> <a href="/" class="text-sm font-bold transition-colors duration-200 flex items-center gap-2 text-gray-400 hover:text-gray-200" data-astro-cid-353qvbhl> الرئيسية </a><a href="/manga-list" class="text-sm font-bold transition-colors duration-200 flex items-center gap-2 text-gray-400 hover:text-gray-200" data-astro-cid-353qvbhl> المانجا </a><a href="/latest" class="text-sm font-bold transition-colors duration-200 flex items-center gap-2 text-gray-400 hover:text-gray-200" data-astro-cid-353qvbhl> أحدث الفصول </a><a href="/genres" class="text-sm font-bold transition-colors duration-200 flex items-center gap-2 text-gray-400 hover:text-gray-200" data-astro-cid-353qvbhl> التصنيفات </a><a href="/store" class="text-sm font-bold transition-colors duration-200 flex items-center gap-2 text-gray-400 hover:text-gray-200" data-astro-cid-353qvbhl> المتجر </a>  </nav> </div> <div class="flex items-center gap-4 md:gap-6" data-astro-cid-353qvbhl> <a href="/donate" class="hidden md:flex items-center gap-2 px-4 py-1.5 rounded-full text-white text-xs font-bold shadow-lg hover:brightness-110 transition-all transform hover:scale-105" style="background-color: var(--color-brand-primary, #E50914);" data-astro-cid-353qvbhl> <i class="fas fa-heart text-[10px] animate-pulse" data-astro-cid-353qvbhl></i> <span data-astro-cid-353qvbhl>ادعمنا</span> </a> <div class="flex md:hidden items-center gap-6" data-astro-cid-353qvbhl> <button id="navbar-flip-btn" class="text-white/60 hover:text-white transition-colors p-2 -m-2" aria-label="تبديل اتجاه الشريط" title="تبديل اتجاه الشريط" data-astro-cid-353qvbhl> <i class="fas fa-exchange-alt text-lg" data-astro-cid-353qvbhl></i> </button> <button id="search-trigger-mobile" class="text-white hover:text-gray-300 transition-colors p-2 -m-2" aria-label="بحث" data-astro-cid-353qvbhl> <i class="fas fa-search text-xl" data-astro-cid-353qvbhl></i> </button>  <button id="mobile-menu-button" class="text-white hover:text-gray-300 transition-colors p-2 -m-2" aria-label="القائمة" data-astro-cid-353qvbhl> <i class="fas fa-bars text-xl" data-astro-cid-353qvbhl></i> </button> </div> <button id="search-trigger" class="hidden md:block text-white hover:text-gray-300 transition-colors" aria-label="بحث" data-astro-cid-353qvbhl> <i class="fas fa-search text-xl" data-astro-cid-353qvbhl></i> </button> <div class="hidden md:block" data-astro-cid-353qvbhl> <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();;(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Z1IIdkE" prefix="r1" component-url="/_astro/ThemeSettings.CgT94PXa.js" component-export="default" renderer-url="/_astro/client.Di_8Mrau.js" props="{&quot;data-astro-cid-353qvbhl&quot;:[0,true]}" ssr client="load" opts="{&quot;name&quot;:&quot;ThemeSettings&quot;,&quot;value&quot;:true}" await-children><div class="relative"><button class="p-2 text-gray-400 hover:text-white transition-colors duration-200 relative group" title="إعدادات المظهر" aria-label="إعدادات المظهر"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg><span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-zinc-800" style="background-color:var(--color-brand-primary, #E50914)"></span></button></div><!--astro:end--></astro-island> </div> <div class="hidden md:flex items-center gap-4" data-astro-cid-353qvbhl> <a href="/login" class="text-white hover:text-gray-300 text-sm font-bold transition-colors" data-astro-cid-353qvbhl>تسجيل الدخول</a> <a href="/register" class="text-white px-5 py-2 rounded-sm text-sm font-bold transition-colors shadow-sm hover:opacity-80" style="background-color: var(--color-brand-primary, #E50914);" data-astro-cid-353qvbhl>إنشاء حساب</a> </div> </div> </div> </div> </header> <div id="search-overlay" class="fixed inset-0 bg-black/98 backdrop-blur-md z-[80] hidden flex flex-col items-center pt-16 md:pt-24 opacity-0 transition-opacity duration-300" data-astro-cid-353qvbhl> <button id="search-close" class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 rounded-full bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-gray-400 hover:text-white transition-all flex items-center justify-center group" data-astro-cid-353qvbhl> <i class="fas fa-times text-lg group-hover:rotate-90 transition-transform duration-200" data-astro-cid-353qvbhl></i> </button> <div class="w-full max-w-2xl px-4 md:px-6" data-astro-cid-353qvbhl> <form id="search-overlay-form" class="relative" data-astro-cid-353qvbhl> <i class="fas fa-search absolute right-4 top-1/2 -translate-y-1/2 text-xl pointer-events-none" style="color: var(--color-brand-primary, #E50914);" data-astro-cid-353qvbhl></i> <input type="text" id="search-overlay-input" class="w-full bg-zinc-900/80 border-2 border-zinc-700 hover:border-zinc-600 focus:border-[var(--color-brand-primary,#E50914)] text-xl md:text-2xl font-bold py-4 pr-14 pl-14 rounded-xl focus:outline-none transition-all text-right text-white placeholder-zinc-500" placeholder="ابحث عن مانجا..." autocomplete="off" data-astro-cid-353qvbhl> <button type="submit" id="search-submit-btn" class="absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-lg flex items-center justify-center text-white transition-all hover:brightness-110 shadow-lg" style="background-color: var(--color-brand-primary, #E50914); box-shadow: 0 4px 14px rgba(229, 9, 20, 0.3);" aria-label="بحث" data-astro-cid-353qvbhl> <i class="fas fa-arrow-left" data-astro-cid-353qvbhl></i> </button> </form> <p id="search-hint" class="text-zinc-500 text-sm mt-4 text-center" data-astro-cid-353qvbhl> <i class="fas fa-keyboard ml-2 text-xs" data-astro-cid-353qvbhl></i>
+اكتب اسم المانجا للبحث أو اضغط Enter للانتقال لصفحة البحث
+</p> <div id="search-suggestions" class="mt-6 hidden" data-astro-cid-353qvbhl> <div class="flex items-center justify-between mb-4" data-astro-cid-353qvbhl> <span class="text-zinc-400 text-sm font-medium flex items-center gap-2" data-astro-cid-353qvbhl> <i class="fas fa-lightbulb text-yellow-500 text-xs" data-astro-cid-353qvbhl></i>
+اقتراحات البحث
+</span> <a id="view-all-results" href="#" class="text-sm font-bold hover:underline transition-colors flex items-center gap-1" style="color: var(--color-brand-primary, #E50914);" data-astro-cid-353qvbhl>
+عرض كل النتائج <i class="fas fa-arrow-left text-xs" data-astro-cid-353qvbhl></i> </a> </div> <div id="search-suggestions-list" class="space-y-2" data-astro-cid-353qvbhl></div> </div> <div id="search-overlay-results" class="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 max-h-[55vh] overflow-y-auto custom-scrollbar pb-4 hidden" data-astro-cid-353qvbhl></div> </div> </div> <script>
+  // Early search binding: runs at parse time (no imports => not bundled/deferred),
+  // so the search overlay is interactive before the ad/module load storm.
+  (function () {
+    if (window.__searchEarlyBound) return;
+    window.__searchEarlyBound = true;
+    var overlay = document.getElementById('search-overlay');
+    if (!overlay) return;
+    var input = document.getElementById('search-overlay-input');
+
+    function openSearch() {
+      if (!overlay.classList.contains('hidden')) return;      // idempotent
+      overlay.classList.remove('hidden');
+      void overlay.offsetWidth;                               // force reflow
+      overlay.classList.remove('opacity-0');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () { if (input) input.focus(); }, 100);
+    }
+    function closeSearch() {
+      if (overlay.classList.contains('hidden')) return;       // idempotent
+      overlay.classList.add('opacity-0');
+      setTimeout(function () {
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+        if (input) input.value = '';
+      }, 300);
+    }
+    window.__openSearch = openSearch;
+    window.__closeSearch = closeSearch;
+
+    document.addEventListener('click', function (e) {
+      if (e.target.closest('#search-trigger, #search-trigger-mobile')) { e.preventDefault(); openSearch(); return; }
+      if (e.target.closest('#search-close')) { e.preventDefault(); closeSearch(); return; }
+      if (e.target === overlay) closeSearch();                // backdrop
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !overlay.classList.contains('hidden')) closeSearch();
+    });
+
+    // Enter-to-search early (the module's form-submit handler is also deferred):
+    var form = document.getElementById('search-overlay-form');
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var q = (input && input.value || '').trim();
+      if (q) window.location.href = '/manga-list?search=' + encodeURIComponent(q).replace(/%20/g, '+');
+    });
+  })();
+</script> <div id="mobile-notifications-overlay" class="fixed inset-0 bg-black/95 backdrop-blur-sm z-[80] hidden flex flex-col opacity-0 transition-opacity duration-300" data-astro-cid-353qvbhl> <div class="flex items-center justify-between p-4 border-b border-zinc-800" data-astro-cid-353qvbhl> <h2 class="text-lg font-bold text-white flex items-center gap-2" data-astro-cid-353qvbhl> <i class="fas fa-bell" style="color: var(--color-brand-primary, #E50914);" data-astro-cid-353qvbhl></i>
+الإشعارات
+</h2> <button id="mobile-notifications-close" class="w-10 h-10 rounded-full bg-zinc-800 hover:bg-zinc-700 text-gray-400 hover:text-white transition-all flex items-center justify-center" data-astro-cid-353qvbhl> <i class="fas fa-times text-xl" data-astro-cid-353qvbhl></i> </button> </div> <div id="mobile-notifications-list" class="flex-1 overflow-y-auto custom-scrollbar" style="direction: ltr;" data-astro-cid-353qvbhl> <div style="direction: rtl;" data-astro-cid-353qvbhl> <div class="p-8 text-center text-gray-500" data-astro-cid-353qvbhl> <i class="fas fa-spinner fa-spin text-2xl mb-3" data-astro-cid-353qvbhl></i> <p data-astro-cid-353qvbhl>جاري التحميل...</p> </div> </div> </div> <div class="p-4 border-t border-zinc-800 bg-zinc-900/80 safe-area-bottom" data-astro-cid-353qvbhl> <div class="flex gap-3" data-astro-cid-353qvbhl> <button id="mobile-clear-all-notifications" class="flex-1 py-3 rounded-lg text-gray-300 font-medium bg-zinc-800 hover:bg-zinc-700 transition-colors" data-astro-cid-353qvbhl> <i class="fas fa-trash ml-2" data-astro-cid-353qvbhl></i>
+مسح الكل
+</button> <a href="/profile?tab=notifications" class="flex-1 py-3 rounded-lg text-white font-bold text-center transition-colors" style="background-color: var(--color-brand-primary, #E50914);" data-astro-cid-353qvbhl>
+عرض الكل
+<i class="fas fa-arrow-left mr-2" data-astro-cid-353qvbhl></i> </a> </div> </div> </div> <div id="logout-confirm-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center opacity-0 transition-opacity duration-300" data-astro-cid-353qvbhl> <div class="bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl w-full max-w-sm mx-4 overflow-hidden transform scale-95 transition-transform duration-300" data-astro-cid-353qvbhl> <div class="p-6 text-center" data-astro-cid-353qvbhl> <div class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4" data-astro-cid-353qvbhl> <i class="fas fa-sign-out-alt text-3xl text-red-500" data-astro-cid-353qvbhl></i> </div> <h3 class="text-xl font-bold text-white mb-2" data-astro-cid-353qvbhl>تسجيل الخروج</h3> <p class="text-gray-400 mb-6" data-astro-cid-353qvbhl>هل أنت متأكد أنك تريد تسجيل الخروج من حسابك؟</p> <div class="flex gap-3" data-astro-cid-353qvbhl> <button id="confirm-logout-btn" class="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors" data-astro-cid-353qvbhl>
+نعم، خروج
+</button> <button id="cancel-logout-btn" class="flex-1 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-gray-300 font-bold rounded-lg transition-colors border border-zinc-700" data-astro-cid-353qvbhl>
+إلغاء
+</button> </div> </div> </div> </div> <div id="mobile-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden z-[75] transition-opacity duration-300" data-astro-cid-353qvbhl></div> <aside id="mobile-drawer" class="fixed inset-y-0 right-0 w-[280px] shadow-2xl transform translate-x-full transition-transform duration-300 z-[90] flex flex-col invisible" style="background-color: var(--color-bg-primary);" data-astro-cid-353qvbhl> <div class="flex flex-col h-[100dvh] overflow-hidden" data-astro-cid-353qvbhl> <div class="flex items-center justify-between p-4 flex-shrink-0" data-astro-cid-353qvbhl> <span class="text-xl font-black" style="color: var(--color-brand-primary, #E50914);" data-astro-cid-353qvbhl>MANGATEK</span> <div class="flex items-center gap-2" data-astro-cid-353qvbhl> <button id="hand-switch-btn" class="w-8 h-8 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-gray-400 hover:text-white transition-all flex items-center justify-center border border-zinc-700" aria-label="تبديل جهة القائمة" title="تبديل جهة القائمة" data-astro-cid-353qvbhl> <i class="fas fa-hand-paper text-sm" id="hand-switch-icon" data-astro-cid-353qvbhl></i> </button> <button id="mobile-close" class="text-gray-400 hover:text-white" data-astro-cid-353qvbhl> <i class="fas fa-times text-xl" data-astro-cid-353qvbhl></i> </button> </div> </div> <div class="flex-1 overflow-y-auto px-4 pb-4 no-scrollbar" data-astro-cid-353qvbhl> <nav class="flex flex-col gap-1 mb-4" data-astro-cid-353qvbhl> <a href="/" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all group text-gray-400 hover:text-white hover:bg-zinc-800" style data-astro-cid-353qvbhl> <span class="w-7 h-7 rounded-md flex items-center justify-center transition-colors bg-zinc-900/50 text-gray-500 group-hover:bg-zinc-800 group-hover:text-gray-300" data-astro-cid-353qvbhl> <!-- Assuming icons are mapped or using a default. Using text fallback if icon missing locally, but user req confirms same structure. 
+                  Mangatek navLinks usually have icon property. --> <i class="fas fa-home text-[11px]" data-astro-cid-353qvbhl></i> </span> الرئيسية </a><a href="/manga-list" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all group text-gray-400 hover:text-white hover:bg-zinc-800" style data-astro-cid-353qvbhl> <span class="w-7 h-7 rounded-md flex items-center justify-center transition-colors bg-zinc-900/50 text-gray-500 group-hover:bg-zinc-800 group-hover:text-gray-300" data-astro-cid-353qvbhl> <!-- Assuming icons are mapped or using a default. Using text fallback if icon missing locally, but user req confirms same structure. 
+                  Mangatek navLinks usually have icon property. --> <i class="fas fa-book text-[11px]" data-astro-cid-353qvbhl></i> </span> المانجا </a><a href="/latest" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all group text-gray-400 hover:text-white hover:bg-zinc-800" style data-astro-cid-353qvbhl> <span class="w-7 h-7 rounded-md flex items-center justify-center transition-colors bg-zinc-900/50 text-gray-500 group-hover:bg-zinc-800 group-hover:text-gray-300" data-astro-cid-353qvbhl> <!-- Assuming icons are mapped or using a default. Using text fallback if icon missing locally, but user req confirms same structure. 
+                  Mangatek navLinks usually have icon property. --> <i class="fas fa-clock text-[11px]" data-astro-cid-353qvbhl></i> </span> أحدث الفصول </a><a href="/genres" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all group text-gray-400 hover:text-white hover:bg-zinc-800" style data-astro-cid-353qvbhl> <span class="w-7 h-7 rounded-md flex items-center justify-center transition-colors bg-zinc-900/50 text-gray-500 group-hover:bg-zinc-800 group-hover:text-gray-300" data-astro-cid-353qvbhl> <!-- Assuming icons are mapped or using a default. Using text fallback if icon missing locally, but user req confirms same structure. 
+                  Mangatek navLinks usually have icon property. --> <i class="fas fa-tag text-[11px]" data-astro-cid-353qvbhl></i> </span> التصنيفات </a><a href="/store" class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm font-medium transition-all group text-gray-400 hover:text-white hover:bg-zinc-800" style data-astro-cid-353qvbhl> <span class="w-7 h-7 rounded-md flex items-center justify-center transition-colors bg-zinc-900/50 text-gray-500 group-hover:bg-zinc-800 group-hover:text-gray-300" data-astro-cid-353qvbhl> <!-- Assuming icons are mapped or using a default. Using text fallback if icon missing locally, but user req confirms same structure. 
+                  Mangatek navLinks usually have icon property. --> <i class="fas fa-store text-[11px]" data-astro-cid-353qvbhl></i> </span> المتجر </a> </nav> <a href="/donate" class="flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-bold text-white mb-3 hover:brightness-110 transition-all shadow-lg" style="background: linear-gradient(to right, var(--color-brand-primary, #E50914), #ff4b5c);" data-astro-cid-353qvbhl> <i class="fas fa-heart text-[10px]" data-astro-cid-353qvbhl></i> <span data-astro-cid-353qvbhl>ادعمنا واحصل على نقاط</span> </a> <div class="border-t border-zinc-800 pt-4 mt-2" data-astro-cid-353qvbhl> <div id="mobile-auth-buttons" class="space-y-2" data-astro-cid-353qvbhl> <a href="/login" class="flex items-center justify-center w-full px-4 py-2.5 rounded-lg text-sm font-medium text-gray-300 bg-zinc-800 hover:bg-zinc-700 transition-all border border-zinc-700" data-astro-cid-353qvbhl>
+تسجيل الدخول
+</a> <a href="/register" class="flex items-center justify-center w-full px-4 py-2.5 rounded-lg text-sm font-bold text-white transition-all shadow-lg hover:brightness-110" style="background-color: var(--color-brand-primary, #E50914);" data-astro-cid-353qvbhl>
+إنشاء حساب جديد
+</a> </div> </div> <div class="border-t border-zinc-800 p-4 pb-8 mt-4 bg-zinc-900/30 -mx-4 mb-4" data-astro-cid-353qvbhl> <p class="text-xs font-bold text-gray-500 mb-3 px-1 uppercase tracking-wider" data-astro-cid-353qvbhl>المظهر</p> <div class="grid grid-cols-7 gap-2" id="mobile-color-picker" data-astro-cid-353qvbhl> <button class="color-option h-8 w-full rounded-md transition-all hover:scale-105 border border-white/10" data-color="#E50914" data-dark="#B20710" style="background-color: #E50914" data-astro-cid-353qvbhl></button> <button class="color-option h-8 w-full rounded-md transition-all hover:scale-105 border border-white/10" data-color="#0EA5E9" data-dark="#0284C7" style="background-color: #0EA5E9" data-astro-cid-353qvbhl></button> <button class="color-option h-8 w-full rounded-md transition-all hover:scale-105 border border-white/10" data-color="#10B981" data-dark="#059669" style="background-color: #10B981" data-astro-cid-353qvbhl></button> <button class="color-option h-8 w-full rounded-md transition-all hover:scale-105 border border-white/10" data-color="#8B5CF6" data-dark="#7C3AED" style="background-color: #8B5CF6" data-astro-cid-353qvbhl></button> <button class="color-option h-8 w-full rounded-md transition-all hover:scale-105 border border-white/10" data-color="#EC4899" data-dark="#DB2777" style="background-color: #EC4899" data-astro-cid-353qvbhl></button> <button class="color-option h-8 w-full rounded-md transition-all hover:scale-105 border border-white/10" data-color="#F97316" data-dark="#EA580C" style="background-color: #F97316" data-astro-cid-353qvbhl></button> <label class="relative h-8 w-full rounded-md transition-all hover:scale-105 cursor-pointer overflow-hidden group border border-white/10" data-astro-cid-353qvbhl> <div class="absolute inset-0 rounded-md" style="background: linear-gradient(135deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080);" data-astro-cid-353qvbhl></div> <div class="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/20 transition-colors rounded-md" data-astro-cid-353qvbhl> <i class="fas fa-pencil-alt text-white text-[8px] drop-shadow-md" data-astro-cid-353qvbhl></i> </div> <input type="color" id="mobile-custom-color-input" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer z-[100]" value="#E50914" data-astro-cid-353qvbhl> </label> </div> </div> </div> </div></aside> <script type="module" src="/_astro/Navbar.astro_astro_type_script_index_0_lang.7hzyudmw.js"></script>   <main class="flex-grow "> <div id="reader-container" class="min-h-screen bg-black text-white" data-id="251679" data-mid="2639" data-allow="true" data-next-url="/reader/three-brothers/65" data-prev-url="/reader/three-brothers/63" data-manga-slug="three-brothers" data-chapter-number="64"><header id="reader-top-nav" class="reader-nav reader-nav-top backdrop-blur-md bg-black/80 border-b border-white/5"><div class="h-14 px-4 max-w-4xl mx-auto flex items-center justify-between gap-4" dir="rtl"><a href="/manga/three-brothers" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm font-medium"><i class="fas fa-arrow-right text-xs"></i><span class="hidden sm:inline">العودة للمانجا</span></a><div class="flex items-center gap-3"><a href="/reader/three-brothers/63" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors" title="الفصل السابق"><i class="fas fa-chevron-right text-sm"></i></a><div class="relative" id="chapter-dropdown-container"><button id="chapter-dropdown-btn" class="flex items-center gap-3 px-4 py-2 rounded-full bg-[#181818] hover:bg-[#252525] border border-zinc-800 transition-all text-sm font-bold shadow-sm"><span class="text-white">الفصل 64</span><i class="fas fa-chevron-down text-xs text-gray-500"></i></button><div id="chapter-dropdown-menu" class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-[#181818] border border-zinc-700 rounded-lg shadow-2xl z-50 hidden max-h-80 overflow-y-auto custom-scrollbar"><a href="/reader/three-brothers/1" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 1</a><a href="/reader/three-brothers/2" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 2</a><a href="/reader/three-brothers/3" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 3</a><a href="/reader/three-brothers/4" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 4</a><a href="/reader/three-brothers/5" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 5</a><a href="/reader/three-brothers/6" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 6</a><a href="/reader/three-brothers/7" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 7</a><a href="/reader/three-brothers/8" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 8</a><a href="/reader/three-brothers/9" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 9</a><a href="/reader/three-brothers/10" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 10</a><a href="/reader/three-brothers/11" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 11</a><a href="/reader/three-brothers/12" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 12</a><a href="/reader/three-brothers/13" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 13</a><a href="/reader/three-brothers/14" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 14</a><a href="/reader/three-brothers/15" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 15</a><a href="/reader/three-brothers/16" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 16</a><a href="/reader/three-brothers/17" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 17</a><a href="/reader/three-brothers/18" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 18</a><a href="/reader/three-brothers/19" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 19</a><a href="/reader/three-brothers/20" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 20</a><a href="/reader/three-brothers/21" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 21</a><a href="/reader/three-brothers/22" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 22</a><a href="/reader/three-brothers/23" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 23</a><a href="/reader/three-brothers/24" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 24</a><a href="/reader/three-brothers/25" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 25</a><a href="/reader/three-brothers/26" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 26</a><a href="/reader/three-brothers/27" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 27</a><a href="/reader/three-brothers/28" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 28</a><a href="/reader/three-brothers/29" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 29</a><a href="/reader/three-brothers/30" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 30</a><a href="/reader/three-brothers/31" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 31</a><a href="/reader/three-brothers/32" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 32</a><a href="/reader/three-brothers/33" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 33</a><a href="/reader/three-brothers/34" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 34</a><a href="/reader/three-brothers/35" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 35</a><a href="/reader/three-brothers/36" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 36</a><a href="/reader/three-brothers/37" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 37</a><a href="/reader/three-brothers/38" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 38</a><a href="/reader/three-brothers/39" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 39</a><a href="/reader/three-brothers/40" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 40</a><a href="/reader/three-brothers/41" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 41</a><a href="/reader/three-brothers/42" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 42</a><a href="/reader/three-brothers/43" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 43</a><a href="/reader/three-brothers/44" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 44</a><a href="/reader/three-brothers/45" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 45</a><a href="/reader/three-brothers/46" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 46</a><a href="/reader/three-brothers/47" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 47</a><a href="/reader/three-brothers/48" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 48</a><a href="/reader/three-brothers/49" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 49</a><a href="/reader/three-brothers/50" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 50</a><a href="/reader/three-brothers/51" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 51</a><a href="/reader/three-brothers/52" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 52</a><a href="/reader/three-brothers/53" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 53</a><a href="/reader/three-brothers/54" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 54</a><a href="/reader/three-brothers/55" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 55</a><a href="/reader/three-brothers/56" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 56</a><a href="/reader/three-brothers/57" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 57</a><a href="/reader/three-brothers/58" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 58</a><a href="/reader/three-brothers/59" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 59</a><a href="/reader/three-brothers/60" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 60</a><a href="/reader/three-brothers/61" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 61</a><a href="/reader/three-brothers/62" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 62</a><a href="/reader/three-brothers/63" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 63</a><a href="/reader/three-brothers/64" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-[var(--color-brand-primary,#E50914)] font-bold bg-white/5">
+الفصل 64</a><a href="/reader/three-brothers/65" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 65</a><a href="/reader/three-brothers/66" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 66</a><a href="/reader/three-brothers/67" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 67</a><a href="/reader/three-brothers/68" class="block px-4 py-3 text-sm border-b border-white/5 hover:bg-white/5 last:border-0 transition-colors text-gray-300">
+الفصل 68</a></div></div><a href="/reader/three-brothers/65" class="w-9 h-9 rounded-full flex items-center justify-center bg-[var(--color-brand-primary,#E50914)] hover:bg-[var(--color-brand-primary-dark,#b20710)] text-white shadow-lg transition-colors" title="الفصل التالي"><i class="fas fa-chevron-left text-sm"></i></a></div><button id="settings-open-btn" class="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition-colors"><i class="fas fa-cog text-lg"></i></button></div></header><main id="reader-content" class="reader-vertical pt-16 pb-20"><div id="chapter-header" class="w-full max-w-xl mx-auto p-6 text-center mb-8"><h1 class="text-xl md:text-2xl font-black text-white mb-2 leading-snug">Three brothers</h1><div class="flex items-center justify-center gap-3 text-sm"><span class="text-[var(--color-brand-primary,#E50914)] font-bold">الفصل 64</span></div></div><astro-island uid="Z2keQLI" prefix="r0" component-url="/_astro/ChapterImageViewer.BjOb5iAL.js" component-export="default" renderer-url="/_astro/client.Di_8Mrau.js" props="{&quot;imageUrls&quot;:[1,[[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/638b23bd4d2a4b48df313dd64180e0a4.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/fcf31218216046dd4c07f30c25526305.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/4d19915e7854f6487cfb4cb4efe17f95.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/83f2a7cff42b5efe1e548f112470515d.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/b82c24bbcfb59c145ee833ffc7a0df49.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/16dbf9065332a7430bc638dc6eadaf45.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/fa007a4f3a1aa80ec2df9a333d73402c.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/f10cda11fcb9563ed2fc5738f0748cc6.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/8e4a0efedc43260549b43f27f91984d5.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/27f34357ce125d60ef60f35353e0eb01.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/ca35347b9e1ff9581a660adcc70349dc.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/46cd005e6492844dea4736d3b37ed301.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/ad9f5582ba8d71fb74c55873236d99bf.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/980b55192f9b6ae9012d1440b541fa54.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/5924745ebd6309b1989f1bb3c3138319.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/8a360fb4f7094e74439ac516772f7426.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/db5275bf32015d2634c22bbe03a220e1.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/842b11e73b207a728aa0782fe8c2a9f5.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/bfcdc32fd23e17882caa34e8bc462cb8.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/5545cc1d3d317b9d96b08d2b092f657f.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/e67c5897292c01b17e4ddba359c25b18.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/6b5038e64cfa741ef10a5b6d07f22237.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/1aab4c9f1e5fe756c241176364352f3a.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/91bff3bffdbe536659b9c9c193d12cfb.webp?v=1785015700320&quot;],[0,&quot;https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/3d320350af9309af3e46bbf6d9265b96.webp?v=1785015700320&quot;]]],&quot;error&quot;:[0,null],&quot;mangaSlug&quot;:[0,&quot;three-brothers&quot;],&quot;chapterNumber&quot;:[0,&quot;64&quot;],&quot;textMode&quot;:[0,&quot;baked&quot;],&quot;overlayBlob&quot;:[0,null],&quot;overlayPageOffset&quot;:[0,0]}" ssr client="load" opts="{&quot;name&quot;:&quot;ChapterImageViewer&quot;,&quot;value&quot;:true}" await-children><div class="select-none flex flex-col items-center w-full"><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="1"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 1" src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/638b23bd4d2a4b48df313dd64180e0a4.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/638b23bd4d2a4b48df313dd64180e0a4.webp?v=1785015700320" decoding="async" fetchpriority="high" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="2"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 2" src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/fcf31218216046dd4c07f30c25526305.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/fcf31218216046dd4c07f30c25526305.webp?v=1785015700320" decoding="async" fetchpriority="high" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="3"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 3" src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/4d19915e7854f6487cfb4cb4efe17f95.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/4d19915e7854f6487cfb4cb4efe17f95.webp?v=1785015700320" decoding="async" fetchpriority="high" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="4"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 4" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/83f2a7cff42b5efe1e548f112470515d.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/83f2a7cff42b5efe1e548f112470515d.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="5"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 5" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/b82c24bbcfb59c145ee833ffc7a0df49.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/b82c24bbcfb59c145ee833ffc7a0df49.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="6"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 6" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/16dbf9065332a7430bc638dc6eadaf45.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/16dbf9065332a7430bc638dc6eadaf45.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="7"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 7" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/fa007a4f3a1aa80ec2df9a333d73402c.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/fa007a4f3a1aa80ec2df9a333d73402c.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="8"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 8" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/f10cda11fcb9563ed2fc5738f0748cc6.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/f10cda11fcb9563ed2fc5738f0748cc6.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="9"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 9" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/8e4a0efedc43260549b43f27f91984d5.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/8e4a0efedc43260549b43f27f91984d5.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="10"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 10" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/27f34357ce125d60ef60f35353e0eb01.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/27f34357ce125d60ef60f35353e0eb01.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="11"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 11" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/ca35347b9e1ff9581a660adcc70349dc.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/ca35347b9e1ff9581a660adcc70349dc.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="12"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 12" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/46cd005e6492844dea4736d3b37ed301.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/46cd005e6492844dea4736d3b37ed301.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="13"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 13" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/ad9f5582ba8d71fb74c55873236d99bf.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/ad9f5582ba8d71fb74c55873236d99bf.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="14"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 14" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/980b55192f9b6ae9012d1440b541fa54.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/980b55192f9b6ae9012d1440b541fa54.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="15"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 15" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/5924745ebd6309b1989f1bb3c3138319.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/5924745ebd6309b1989f1bb3c3138319.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="16"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 16" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/8a360fb4f7094e74439ac516772f7426.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/8a360fb4f7094e74439ac516772f7426.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="17"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 17" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/db5275bf32015d2634c22bbe03a220e1.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/db5275bf32015d2634c22bbe03a220e1.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="18"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 18" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/842b11e73b207a728aa0782fe8c2a9f5.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/842b11e73b207a728aa0782fe8c2a9f5.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="19"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 19" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/bfcdc32fd23e17882caa34e8bc462cb8.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/bfcdc32fd23e17882caa34e8bc462cb8.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="20"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 20" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/5545cc1d3d317b9d96b08d2b092f657f.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/5545cc1d3d317b9d96b08d2b092f657f.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="21"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 21" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/e67c5897292c01b17e4ddba359c25b18.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/e67c5897292c01b17e4ddba359c25b18.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="22"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 22" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/6b5038e64cfa741ef10a5b6d07f22237.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/6b5038e64cfa741ef10a5b6d07f22237.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="23"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 23" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/1aab4c9f1e5fe756c241176364352f3a.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/1aab4c9f1e5fe756c241176364352f3a.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="24"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 24" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/91bff3bffdbe536659b9c9c193d12cfb.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/91bff3bffdbe536659b9c9c193d12cfb.webp?v=1785015700320" decoding="async" draggable="false"/></div><div class="manga-page w-full max-w-[800px] relative min-h-[50vh] bg-[#111] overflow-hidden" data-page="25"><div class="skeleton absolute inset-0 z-10" aria-hidden="true"></div><img class="block relative z-20 w-full h-auto" alt="صفحة 25" data-src="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/3d320350af9309af3e46bbf6d9265b96.webp?v=1785015700320" data-url="https://img.mangatek.com/public-mangatek/uploads/arabic/80cdf3104913359570c702f08a122053/ca2461d581ee6f8aeea6d421e758f51e/3d320350af9309af3e46bbf6d9265b96.webp?v=1785015700320" decoding="async" draggable="false"/></div></div><!--astro:end--></astro-island><!-- 
+  Trap Image
+  Hidden from users but visible in DOM for scrapers.
+  Identical class to real pages.
+--><script>(function(){const fpEndpoint = "https://api.mangatek.com/api/media/analytics";
+const selectedTrapUrl = "/api/chapters/stream/b5932c0b8bcc6318606e9b119adeadbeef77763be6c6a670e91c6c3204/dGhyZWUtYnJvdGhlcnMtNjQtMTc4NjE1NTc5OQ?v=1786155799";
+const trapId = "img-xv2b7k5l";
+
+(function() {
+  'use strict';
+  
+  // Fingerprint collection
+  async function collectFingerprint() {
+    const fp = {};
+    
+    try {
+      // Basic browser info
+      fp.screenResolution = `${screen.width}x${screen.height}`;
+      fp.colorDepth = screen.colorDepth;
+      fp.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      fp.timezoneOffset = new Date().getTimezoneOffset();
+      fp.language = navigator.language || navigator.userLanguage;
+      fp.languages = navigator.languages ? navigator.languages.join(',') : '';
+      fp.platform = navigator.platform;
+      fp.hardwareConcurrency = navigator.hardwareConcurrency || 0;
+      fp.deviceMemory = navigator.deviceMemory || 0;
+      fp.maxTouchPoints = navigator.maxTouchPoints || 0;
+      fp.cookieEnabled = navigator.cookieEnabled;
+      fp.doNotTrack = navigator.doNotTrack || 'unknown';
+      
+      // WebGL fingerprint
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (gl) {
+          const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+          if (debugInfo) {
+            fp.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+            fp.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+          }
+        }
+      } catch (e) {}
+      
+      // Canvas fingerprint (hash)
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = 200;
+        canvas.height = 50;
+        const ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#f60';
+        ctx.fillRect(125, 1, 62, 20);
+        ctx.fillStyle = '#069';
+        ctx.fillText('Mangatek FP', 2, 15);
+        ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+        ctx.fillText('Mangatek FP', 4, 17);
+        fp.canvasHash = hashCode(canvas.toDataURL());
+      } catch (e) {}
+      
+      // Audio context fingerprint
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+          const audioCtx = new AudioContext();
+          fp.audioSampleRate = audioCtx.sampleRate;
+          fp.audioChannels = audioCtx.destination.maxChannelCount;
+          audioCtx.close();
+        }
+      } catch (e) {}
+      
+      // Headless browser detection
+      fp.isHeadless = detectHeadless();
+      fp.isBot = detectBot();
+      
+      // Plugins
+      try {
+        const plugins = [];
+        for (let i = 0; i < navigator.plugins.length && i < 5; i++) {
+          plugins.push(navigator.plugins[i].name);
+        }
+        fp.plugins = plugins.join(',');
+      } catch (e) {}
+      
+      // Generate hash of all components
+      fp.hash = generateFpHash(fp);
+      
+    } catch (e) {
+      console.error('[FP] Error collecting fingerprint:', e);
+    }
+    
+    return fp;
+  }
+  
+  // Simple hash function
+  function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash;
+    }
+    return Math.abs(hash).toString(16);
+  }
+  
+  // Generate fingerprint hash
+  function generateFpHash(fp) {
+    const components = [
+      fp.screenResolution,
+      fp.colorDepth,
+      fp.timezone,
+      fp.language,
+      fp.platform,
+      fp.webglRenderer,
+      fp.canvasHash,
+      fp.audioSampleRate
+    ].filter(Boolean).join('|');
+    
+    return hashCode(components);
+  }
+  
+  // Headless browser detection
+  function detectHeadless() {
+    const checks = [];
+    
+    // Check for headless Chrome
+    if (navigator.webdriver) checks.push('webdriver');
+    
+    // Check for PhantomJS
+    if (window._phantom || window.callPhantom) checks.push('phantom');
+    
+    // Check for Nightmare
+    if (window.__nightmare) checks.push('nightmare');
+    
+    // Check for Selenium
+    if (window.document.__selenium_unwrapped ||
+        window.document.__webdriver_evaluate ||
+        window.document.__driver_evaluate) checks.push('selenium');
+    
+    // Check for missing plugins in headless
+    if (navigator.plugins.length === 0) checks.push('no-plugins');
+    
+    // Check for missing languages
+    if (!navigator.languages || navigator.languages.length === 0) checks.push('no-languages');
+    
+    // Chrome headless specific
+    if (/HeadlessChrome/.test(navigator.userAgent)) checks.push('headless-chrome');
+    
+    // Check for automation flags
+    if (navigator.webdriver === true) checks.push('webdriver-flag');
+    
+    return checks.length > 0;
+  }
+  
+  // Bot detection
+  function detectBot() {
+    const ua = navigator.userAgent.toLowerCase();
+    const botPatterns = [
+      'bot', 'crawl', 'spider', 'scrape', 'wget', 'curl',
+      'python', 'java', 'perl', 'ruby', 'go-http', 'nodejs',
+      'puppeteer', 'playwright', 'selenium', 'headless',
+      'phantom', 'nightmare', 'splash', 'webdriver',
+      'scrapy', 'beautifulsoup', 'aiohttp', 'httpx',
+      'axios', 'node-fetch', 'got/', 'request/'
+    ];
+    
+    return botPatterns.some(pattern => ua.includes(pattern));
+  }
+  
+  // Store fingerprint in cookie for cloaking middleware
+  function storeFingerprintCookie(fpHash) {
+    try {
+      document.cookie = `_fp=${fpHash};path=/;max-age=31536000;SameSite=Lax`;
+    } catch (e) {}
+  }
+  
+  // Initialize
+  async function init() {
+    try {
+      // Collect fingerprint
+      const fp = await collectFingerprint();
+      
+      // Store hash in cookie for cloaking checks
+      if (fp.hash) {
+        storeFingerprintCookie(fp.hash);
+      }
+      
+      // Encode fingerprint for URL
+      const fpEncoded = btoa(JSON.stringify(fp));
+      
+      // Update trap image URL with fingerprint
+      const trapImg = document.getElementById(trapId);
+      if (trapImg) {
+        const trapUrl = trapImg.dataset.trapUrl;
+        // Only update src if we have a valid trap URL
+        if (trapUrl && trapUrl !== 'undefined') {
+          trapImg.src = `${trapUrl}&fp=${fpEncoded}`;
+        }
+      }
+      
+      // Also send to fingerprint collection endpoint (for cases where trap isn't triggered)
+      try {
+        fetch(fpEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(fp),
+          credentials: 'include',
+          keepalive: true
+        }).catch(() => {});
+      } catch (e) {}
+      
+    } catch (error) {
+      // Silent fail - don't alert scrapers
+    }
+  }
+  
+  // Run when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    // Small delay to avoid blocking main thread
+    setTimeout(init, 100);
+  }
+})();
+})();</script></main><footer id="reader-bottom-nav" class="reader-nav reader-nav-bottom safe-area-inset backdrop-blur-md bg-black/80 border-t border-white/5"><div class="h-16 px-4 max-w-4xl mx-auto flex items-center justify-between gap-4" dir="rtl"><div class="flex-1"><a href="/reader/three-brothers/63" class="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm font-medium"><i class="fas fa-arrow-right text-xs"></i><span class="hidden sm:inline">السابق</span></a></div><div class="flex items-center justify-center gap-3"><button id="report-btn-overlay" class="w-8 h-8 rounded-full bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white flex items-center justify-center transition-colors border border-red-500/20" title="إبلاغ عن مشكلة"><i class="fas fa-exclamation-triangle text-xs"></i></button><div class="flex items-center gap-2 bg-[#181818] rounded-full p-1 pr-3 border border-zinc-800 shadow-lg"><button id="quick-play-btn" class="w-8 h-8 rounded-full bg-[var(--color-brand-primary,#E50914)] text-white flex items-center justify-center hover:bg-[var(--color-brand-primary-dark,#b20710)] transition-colors"><i class="fas fa-play text-xs ml-0.5"></i></button><div id="quick-speed-container" class="flex items-center gap-2 transition-all overflow-hidden" style="max-width: 0px; opacity: 0;"><input type="range" id="speed-slider" min="1" max="100" value="50" class="w-24 h-1.5 bg-zinc-700 rounded-lg appearance-none cursor-pointer accent-[var(--color-brand-primary,#E50914)]"><span class="text-[10px] text-zinc-400 w-6 text-center" id="speed-value">50%</span></div><button id="quick-speed-btn" class="text-zinc-400 hover:text-white px-2 transition-colors"><i class="fas fa-tachometer-alt"></i></button></div><div class="hidden sm:flex items-center gap-2 text-xs font-bold text-zinc-500 bg-[#181818] px-3 py-1.5 rounded-full border border-zinc-800"><span class="text-[var(--color-brand-primary,#E50914)]" id="current-page">1</span><span>/</span><span class="text-white" id="total-pages">25</span></div></div><div class="flex-1 text-left"><a href="/reader/three-brothers/65" class="inline-flex items-center gap-2 bg-[var(--color-brand-primary,#E50914)] hover:bg-[var(--color-brand-primary-dark,#b20710)] text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg transition-colors"><span>التالي</span><i class="fas fa-arrow-left text-xs"></i></a></div></div></footer><div id="settings-overlay" class="reader-settings-overlay"><div id="settings-backdrop" class="reader-settings-backdrop"></div><div id="settings-panel" class="reader-settings-panel"><div class="reader-settings-handle sm:hidden"></div><div class="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]"><span class="text-sm font-medium text-white">الإعدادات</span><button id="settings-close-btn" class="w-8 h-8 rounded-lg flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/5"><i class="fas fa-times"></i></button></div><div class="reader-settings-section"><div class="flex items-center justify-between mb-2"><span class="text-xs text-zinc-500">التقدم</span><span class="text-xs text-white"><span id="settings-current-page">1</span> / 25</span></div><div class="progress-bar"><div id="settings-progress-bar" class="progress-bar-fill" style="width: 0%"></div></div></div><div class="reader-settings-section"><label class="reader-settings-label">ملاءمة الصورة</label><div class="reader-settings-button-group"><button id="btn-fit-width" class="active">عرض</button></div></div><div class="reader-settings-section"><label class="reader-settings-label">المسافة بين الصفحات</label><div class="reader-settings-button-group"><button id="btn-gap-none" class="active">بدون</button><button id="btn-gap-small">صغيرة</button><button id="btn-gap-medium">متوسطة</button></div></div><div class="reader-settings-section"><div class="flex items-center justify-between"><label class="reader-settings-label mb-0">التمرير التلقائي</label><button id="btn-auto-scroll-toggle" class="relative w-11 h-6 rounded-full bg-zinc-700 transition-colors"><span class="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white transition-transform"></span></button></div></div><div class="reader-settings-section"><div class="flex gap-2"><a href="/reader/three-brothers/63" class="flex-1 btn btn-secondary text-center text-sm"><i class="fas fa-arrow-right ml-1"></i>السابق
+</a><a href="/reader/three-brothers/65" class="flex-1 btn btn-primary text-center text-sm">
+التالي<i class="fas fa-arrow-left mr-1"></i></a></div></div></div></div></div><div class="w-full max-w-4xl mx-auto px-4 py-6 flex flex-wrap gap-4 items-center justify-center"><button id="report-btn-static" class="flex items-center gap-2 text-sm font-bold text-red-500 hover:text-white transition-colors bg-red-500/10 hover:bg-red-500 px-6 py-3 rounded-full border border-red-500/20 shadow-lg shadow-red-900/10"><i class="fas fa-exclamation-triangle"></i><span>الإبلاغ عن مشكلة في الفصل</span></button><a href="https://discord.gg/YU35cXTVej" target="_blank" rel="noopener noreferrer" class="group flex items-center gap-2 text-sm font-bold text-white transition-colors bg-[#5865F2]/10 hover:bg-[#5865F2] px-6 py-3 rounded-full border border-[#5865F2]/20 shadow-lg shadow-[#5865F2]/10"><i class="fab fa-discord text-[#5865F2] group-hover:text-white transition-colors"></i><span>انضم إلى ديسكورد</span></a></div><section class="w-full max-w-3xl mx-auto px-4 py-4" dir="rtl"><div class="rounded-lg border border-zinc-800 bg-[#141414]"><div class="flex items-center gap-3 px-4 py-2.5 rounded-t-lg"><img src="https://api.mangatek.com/api/users/avatar/1_1759024517391.jpg" alt="Morph6" class="w-9 h-9 rounded-full object-cover bg-zinc-900 ring-1 ring-zinc-700 shrink-0"><div class="flex-1 min-w-0"><div class="text-[10px] text-gray-500 uppercase tracking-wider leading-none">رفع منفرد</div><div class="text-sm font-bold text-white truncate mt-0.5">@Morph6</div></div></div></div></section><div class="my-8 px-4 max-w-4xl mx-auto" data-astro-cid-7bghifin> <h2 class="text-2xl font-bold text-white mb-4 flex items-center" data-astro-cid-7bghifin> <i class="fas fa-comments text-brand ml-2" data-astro-cid-7bghifin></i>
+التعليقات (0)
+</h2> <div class="bg-[#181818] backdrop-blur-sm rounded-xl p-4 border border-zinc-700/50 mb-6 text-center" data-astro-cid-7bghifin> <p class="text-gray-300 mb-3" data-astro-cid-7bghifin>سجل الدخول لتتمكن من إضافة تعليق</p> <a href="/login" class="bg-brand text-white px-6 py-2 rounded-lg transition-colors duration-300 font-medium inline-block shadow-lg hover:opacity-90" data-astro-cid-7bghifin>تسجيل دخول</a> </div> <div id="commentsContainer" class="space-y-4" data-astro-cid-7bghifin> <div class="bg-[#181818] backdrop-blur-sm rounded-xl p-4 border border-zinc-700/50 text-center" data-astro-cid-7bghifin> <p class="text-gray-400" data-astro-cid-7bghifin>لا توجد 
+ تعليقات حتى الآن.
+ كن أول من يعلق!</p> </div> </div>  </div> <script type="module" src="/_astro/Comments.astro_astro_type_script_index_0_lang.B28vdPUq.js"></script> <div class="w-full py-8 pb-32 flex flex-col items-center justify-center text-zinc-700 gap-2" dir="rtl"><div class="flex items-center gap-2"><img src="/Logo/mangatek_logo.png" alt="Logo" class="w-6 h-6 opacity-50 grayscale"><span class="text-sm font-bold opacity-50">قارئ مانجاتك</span></div><p class="text-xs opacity-30">مصمم لتجربة قراءة مثالية</p></div><div id="rate-prompt-overlay" class="hidden fixed inset-x-4 bottom-24 z-[70] pointer-events-none" dir="rtl"><div id="rate-prompt-card" class="pointer-events-auto mx-auto w-full max-w-md bg-[#181818]/95 backdrop-blur-md border border-zinc-700 rounded-2xl shadow-2xl p-5 opacity-0 translate-y-6 transition-all duration-300"><button id="rate-prompt-close" class="absolute top-3 left-3 w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-colors flex items-center justify-center" aria-label="إغلاق"><i class="fas fa-times text-sm"></i></button><h3 class="text-white font-black text-lg mb-1 pl-8">وصلت إلى آخر الفصول!</h3><p class="text-gray-400 text-sm mb-4">رافقت هذا العمل حتى النهاية — قيّمه وشارك رأيك مع القرّاء</p><div id="rate-prompt-gauge" class="grid grid-cols-10 gap-1 mb-1"><button type="button" data-score="1" aria-label="1 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">1</button><button type="button" data-score="2" aria-label="2 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">2</button><button type="button" data-score="3" aria-label="3 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">3</button><button type="button" data-score="4" aria-label="4 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">4</button><button type="button" data-score="5" aria-label="5 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">5</button><button type="button" data-score="6" aria-label="6 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">6</button><button type="button" data-score="7" aria-label="7 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">7</button><button type="button" data-score="8" aria-label="8 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">8</button><button type="button" data-score="9" aria-label="9 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">9</button><button type="button" data-score="10" aria-label="10 من 10" class="rp-seg h-8 rounded bg-zinc-800 border border-zinc-700 text-[10px] font-bold text-zinc-600 transition-all duration-150">10</button></div><div class="flex justify-between text-[10px] text-zinc-600 font-bold mb-4"><span>سيء</span><span>أسطوري</span></div><div class="flex items-center gap-2"><button id="rate-prompt-submit" disabled class="flex-1 bg-[var(--color-brand-primary,#E50914)] text-white py-2.5 rounded-lg font-bold shadow-lg hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed">
+نشر التقييم
+</button><a id="rate-prompt-review-link" href="#" class="text-xs text-zinc-400 hover:text-white font-bold px-2 transition-colors whitespace-nowrap">+ مراجعة</a></div></div></div><div id="report-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 opacity-0 transition-opacity duration-300" role="dialog" aria-modal="true"><div class="w-full max-w-md bg-[#181818] rounded-xl border border-zinc-700 shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300" dir="rtl"><div class="px-6 py-4 border-b border-zinc-700/50 flex items-center justify-between"><h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="fas fa-flag text-red-500"></i>
+الإبلاغ عن مشكلة
+</h3><button id="report-close-btn" class="text-zinc-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5"><i class="fas fa-times"></i></button></div><form id="report-form" class="p-6 space-y-4"><div class="space-y-2"><label for="report-reason" class="block text-xs font-bold text-gray-400 uppercase tracking-wider">نوع المشكلة</label><div class="relative"><select id="report-reason" required class="w-full bg-[#0a0a0a] border border-zinc-700 rounded-lg pl-3 pr-10 py-3 text-white focus:outline-none focus:border-[var(--color-brand-primary,#E50914)] focus:ring-1 focus:ring-[var(--color-brand-primary,#E50914)] appearance-none cursor-pointer transition-colors text-sm"><option value="" disabled selected>اختر المشكلة...</option><option value="missing_pages">صور ناقصة / لا تعمل</option><option value="wrong_chapter">فصل خاطيء / مكرر</option><option value="bad_quality">جودة سيئة / غير مقروءة</option><option value="translation_errors">أخطاء في الترجمة</option><option value="out_of_order">صفحات غير مرتبة</option><option value="other">سبب آخر</option></select><div class="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none text-zinc-500"><i class="fas fa-chevron-down text-xs"></i></div></div></div><div class="space-y-2"><label for="report-desc" class="block text-xs font-bold text-gray-400 uppercase tracking-wider">تفاصيل (اختياري)</label><textarea id="report-desc" rows="3" class="w-full bg-[#0a0a0a] border border-zinc-700 rounded-lg px-3 py-3 text-white focus:outline-none focus:border-[var(--color-brand-primary,#E50914)] focus:ring-1 focus:ring-[var(--color-brand-primary,#E50914)] placeholder-zinc-700 text-sm resize-none transition-colors" placeholder="اشرح المشكلة..."></textarea></div><div id="report-feedback" class="hidden p-3 rounded-lg text-xs font-bold text-center"></div><div class="pt-2"><button type="submit" id="report-submit-btn" class="w-full py-3 rounded-lg text-sm font-bold text-white bg-[var(--color-brand-primary,#E50914)] hover:bg-[var(--color-brand-primary-dark,#b20710)] transition-all flex items-center justify-center gap-2 shadow-lg shadow-red-900/20 active:scale-[0.98]"><span>إرسال البلاغ</span><i class="fas fa-paper-plane text-xs"></i></button></div></form></div></div> <div id="cookie-consent" class="fixed bottom-0 left-0 right-0 z-50 bg-[var(--color-bg-elevated,#141414)] border-t border-[var(--color-border-main,#333)] shadow-[0_-10px_40px_rgba(0,0,0,0.5)] transform translate-y-full transition-transform duration-500 ease-in-out backdrop-blur-md bg-opacity-95"> <div class="max-w-7xl mx-auto px-6 py-6 md:py-8"> <div class="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-12"> <div class="flex-1 text-right w-full" dir="rtl"> <div class="flex items-center gap-3 mb-4"> <i class="fas fa-cookie-bite text-[var(--color-brand-primary,#E50914)] text-2xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"></i> <h3 class="text-white text-xl font-bold">تجربة قراءة أفضل</h3> </div> <p class="text-gray-400 text-sm leading-relaxed mb-6 lg:max-w-3xl">
+نستخدم ملفات تعريف الارتباط لضمان حصولك على أفضل تجربة قراءة ممكنة، من حفظ الفصول التي قرأتها إلى تخصيص الإعدادات بما يناسبك. استمرارك في التصفح يعني موافقتك على ذلك.
+</p> <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-gray-300 text-xs font-medium"> <li class="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-md"> <i class="fas fa-check text-[var(--color-brand-primary,#E50914)]"></i> <span>حفظ تقدمك تلقائياً</span> </li> <li class="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-md"> <i class="fas fa-check text-[var(--color-brand-primary,#E50914)]"></i> <span>حفظ إعدادات القراءة</span> </li> <li class="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-md"> <i class="fas fa-check text-[var(--color-brand-primary,#E50914)]"></i> <span>جلسة تسجيل دخول أطول</span> </li> <li class="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-md"> <i class="fas fa-check text-[var(--color-brand-primary,#E50914)]"></i> <span>تزامن المفضلات</span> </li> </ul> </div> <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto shrink-0"> <button id="accept-cookies" class="flex-1 lg:flex-none bg-[var(--color-brand-primary,#E50914)] hover:bg-[var(--color-brand-primary-dark,#b20710)] text-white px-8 py-3.5 rounded font-bold transition-all shadow-lg hover:shadow-[0_0_20px_rgba(229,9,20,0.4)] flex items-center justify-center gap-2 min-w-[160px]"> <i class="fas fa-check"></i> <span>موافق</span> </button> <button id="decline-cookies" class="flex-1 lg:flex-none bg-transparent hover:bg-white/5 text-gray-400 hover:text-white px-6 py-3.5 rounded border border-gray-600 hover:border-white transition-all flex items-center justify-center gap-2 min-w-[100px]"> <span>رفض</span> </button> </div> </div> </div> </div> <script type="module">const n=s;function a(){const e=["translate-y-full","setItem","3309954dyjLDR","18380lqIzMs","accepted","reload","2932sApIwP","declined","log","remove","add","7530culgLx","undefined","1348304xcxNrd","getItem","accept-cookies","addEventListener","7612047bzppZO","cookie-consent","getElementById","granted","cookieConsentDate","update","resetCookieConsent","4123914MrVJyc","Cookies accepted - Enhanced manga reading experience enabled","2968qKtwjl","cookieConsent","21455amWKOW"];return a=function(){return e},a()}(function(e,o){const t=s,c=e();for(;;)try{if(parseInt(t(344))/1+-parseInt(t(325))/2+parseInt(t(343))/3+parseInt(t(347))/4*(parseInt(t(323))/5)+-parseInt(t(336))/6+-parseInt(t(340))/7*(parseInt(t(338))/8)+parseInt(t(329))/9===o)break;c.push(c.shift())}catch{c.push(c.shift())}})(a,572793),document[n(328)]("DOMContentLoaded",function(){const e=n,o=localStorage[e(326)]("cookieConsent"),t=document[e(331)]("cookie-consent");!o&&t&&setTimeout(()=>{const c=e;t.classList[c(321)]("translate-y-full")},500)}),document.getElementById(n(327))?.[n(328)]("click",function(){const e=n;localStorage[e(342)](e(339),e(345)),localStorage[e(342)](e(333),new Date().toISOString()),x(),console[e(349)](e(337)),typeof gtag!==e(324)&&gtag("consent",e(334),{analytics_storage:"granted",ad_storage:e(332)})}),document[n(331)]("decline-cookies")?.addEventListener("click",function(){const e=n;localStorage.setItem(e(339),e(348)),localStorage.setItem(e(333),new Date().toISOString()),x(),console.log("Cookies declined - Basic functionality only")});function x(){const e=n,o=document[e(331)](e(330));o&&(o.classList[e(322)](e(341)),setTimeout(()=>{o.style.display="none"},500))}function s(e,o){return e=e-321,a()[e]}window.areCookiesAccepted=function(){const e=n;return localStorage[e(326)]("cookieConsent")===e(345)},window[n(335)]=function(){const e=n;localStorage.removeItem("cookieConsent"),localStorage.removeItem(e(333)),location[e(346)]()};</script> </main>  <button id="scroll-to-top" class="fixed bottom-24 right-6 w-11 h-11 rounded-full text-white shadow-lg opacity-0 transition-all duration-300 z-40 flex items-center justify-center translate-y-2 hover:translate-y-0" style="background-color: var(--color-brand-primary, #E50914);" aria-label="العودة إلى الأعلى"> <i class="fas fa-chevron-up text-sm"></i> </button> <script type="module" src="/_astro/Layout.astro_astro_type_script_index_1_lang.B65cZuys.js"></script> <script>
+    (function() {
+      // Track if overlay is shown to prevent duplicates
+      var rateLimitOverlayActive = false;
+      var rateLimitTimer = null;
+      
+      // Inject styles once
+      var style = document.createElement('style');
+      style.id = 'rate-limit-global-styles';
+      style.textContent = `
+        #rate-limit-overlay {
+          position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(10px);
+          display: flex; align-items: center; justify-content: center;
+          z-index: 999999; animation: rlFadeIn 0.3s ease;
+        }
+        @keyframes rlFadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .rate-limit-modal {
+          background: linear-gradient(145deg, #1a1a1a, #252525);
+          border: 1px solid var(--color-brand-primary, #E50914);
+          border-radius: 20px; padding: 40px 50px;
+          max-width: 420px; text-align: center; direction: rtl;
+          box-shadow: 0 25px 80px rgba(229, 9, 20, 0.4);
+          animation: rlSlideUp 0.4s ease;
+        }
+        @keyframes rlSlideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .rate-limit-icon { font-size: 56px; color: var(--color-brand-primary, #E50914); margin-bottom: 20px; animation: rlPulse 2s infinite; }
+        @keyframes rlPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .rate-limit-title { color: #fff; font-size: 26px; font-weight: bold; margin: 0 0 15px 0; font-family: 'Tajawal', sans-serif; }
+        .rate-limit-body { color: #aaa; font-size: 16px; line-height: 1.7; margin: 0 0 25px 0; font-family: 'Tajawal', sans-serif; }
+        .rate-limit-timer { background: rgba(229, 9, 20, 0.15); border: 1px solid rgba(229, 9, 20, 0.3); border-radius: 12px; padding: 15px 30px; display: inline-flex; gap: 10px; margin-bottom: 25px; }
+        .rate-limit-timer span { color: var(--color-brand-primary, #E50914); font-size: 20px; font-weight: bold; }
+        #rate-limit-countdown { font-size: 32px; min-width: 50px; }
+        .rate-limit-close { background: transparent; border: 2px solid #444; color: #777; padding: 12px 35px; border-radius: 10px; cursor: pointer; font-size: 15px; font-family: 'Tajawal', sans-serif; transition: all 0.3s; }
+        .rate-limit-close:hover { border-color: var(--color-brand-primary, #E50914); color: var(--color-brand-primary, #E50914); }
+      `;
+      document.head.appendChild(style);
+      
+      function showRateLimitOverlay(data) {
+        if (rateLimitOverlayActive) return;
+        rateLimitOverlayActive = true;
+
+        // Escape API-provided text before injecting into innerHTML.
+        var escH = function (s) {
+          return String(s == null ? '' : s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        };
+
+        var retrySeconds = (data && data.retryAfterSeconds) || 60;
+        var minutes = Math.ceil(retrySeconds / 60);
+        var title = (data && data.overlayMessage && data.overlayMessage.title) || 'انتظر قليلاً';
+        var body = (data && data.overlayMessage && data.overlayMessage.body) || 
+                   'لقد قمت بإرسال طلبات كثيرة في وقت قصير. يرجى الانتظار ' + minutes + ' دقيقة.';
+        
+        var overlay = document.createElement('div');
+        overlay.id = 'rate-limit-overlay';
+        overlay.innerHTML = '<div class="rate-limit-modal">' +
+          '<div class="rate-limit-icon"><i class="fas fa-hourglass-half"></i></div>' +
+          '<h2 class="rate-limit-title">' + escH(title) + '</h2>' +
+          '<p class="rate-limit-body">' + escH(body) + '</p>' +
+          '<div class="rate-limit-timer"><span id="rate-limit-countdown">' + escH(retrySeconds) + '</span><span>ثانية</span></div>' +
+          '<button class="rate-limit-close" onclick="window.hideRateLimitOverlay()">إغلاق</button>' +
+          '</div>';
+        document.body.appendChild(overlay);
+        
+        var countdown = retrySeconds;
+        rateLimitTimer = setInterval(function() {
+          countdown--;
+          var el = document.getElementById('rate-limit-countdown');
+          if (el) el.textContent = countdown;
+          if (countdown <= 0) {
+            window.hideRateLimitOverlay();
+          }
+        }, 1000);
+      }
+      
+      window.hideRateLimitOverlay = function() {
+        if (rateLimitTimer) { clearInterval(rateLimitTimer); rateLimitTimer = null; }
+        var overlay = document.getElementById('rate-limit-overlay');
+        if (overlay) overlay.remove();
+        rateLimitOverlayActive = false;
+      };
+      
+      // Intercept all fetch requests
+      var originalFetch = window.fetch;
+      window.fetch = function() {
+        return originalFetch.apply(this, arguments).then(function(response) {
+          if (response.status === 429) {
+            response.clone().json().then(function(data) {
+              if (data && data.showOverlay) {
+                showRateLimitOverlay(data);
+              }
+            }).catch(function() {
+              showRateLimitOverlay({});
+            });
+          }
+          return response;
+        });
+      };
+    })();
+    </script> <script type="module">function d(e,n){return e=e-210,x()[e]}const o=d;(function(e,n){const t=d,s=e();for(;;)try{if(parseInt(t(217))/1*(-parseInt(t(219))/2)+-parseInt(t(220))/3*(parseInt(t(214))/4)+-parseInt(t(224))/5+parseInt(t(213))/6+-parseInt(t(218))/7+parseInt(t(212))/8*(-parseInt(t(225))/9)+parseInt(t(222))/10===n)break;s.push(s.shift())}catch{s.push(s.shift())}})(x,674746);let r=0,c=0;document.addEventListener(o(215),()=>{const e=o,n=document[e(223)]("scroll-to-top");if(!n)return;const t=window.pageYOffset||document.documentElement.scrollTop;t<r?c+=r-t:c=0,t>300&&c>500?(n.style.opacity="1",n.style[e(221)]=e(216)):(n.style.opacity="0",n.style.pointerEvents="none"),r=Math.max(0,t)},{passive:!0}),document.getElementById(o(210))?.addEventListener(o(211),()=>{window.scrollTo({top:0,behavior:"smooth"})});function x(){const e=["click","1752OwyzCt","6641502sTHLwP","8bUMNES","scroll","auto","50997fDAFnh","8914955JKyLYl","32kZzmZP","809247NfHutQ","pointerEvents","24350380BgyTwA","getElementById","160575QPZJSe","8469KLzSBu","scroll-to-top"];return x=function(){return e},x()}</script> <script type="module">var i=s;function t(){var r=["31404ahlrPT","41710790YrcvuI","dataLayer","63HnhQkB","640OIYeKB","801208mBrSbm","78sGDSlC","57ldnIKI","7267040VELCtK","550361kgOjLM","2814666DJehRi","24902tIOFMy"];return t=function(){return r},t()}(function(r,e){for(var a=s,n=r();;)try{var I=-parseInt(a(315))/1*(parseInt(a(307))/2)+parseInt(a(306))/3+parseInt(a(308))/4*(-parseInt(a(312))/5)+parseInt(a(314))/6*(-parseInt(a(305))/7)+-parseInt(a(313))/8*(parseInt(a(311))/9)+-parseInt(a(304))/10+parseInt(a(309))/11;if(I===e)break;n.push(n.shift())}catch{n.push(n.shift())}})(t,565617),window[i(310)]=window.dataLayer||[];function s(r,e){r=r-304;var a=t(),n=a[r];return n}function x(){dataLayer.push(arguments)}x("js",new Date),x("config","G-W8MD69ZT8X");</script> <script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a27b0f19fd7de189',t:'MTc4NjE1NTgwNQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body> </html><script type="module" src="/_astro/_chapter_.astro_astro_type_script_index_0_lang.DP6QU1HE.js"></script>
