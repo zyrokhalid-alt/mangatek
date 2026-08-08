@@ -1,10 +1,9 @@
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
 
-console.log("🔥 PUPPETEER EXTRACT LOADED");
+console.log("🔥 SERVERLESS PUPPETEER LOADED");
 
 export default async function handler(req, res) {
-  console.log("🔥 FUNCTION CALLED");
-
   if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
@@ -24,17 +23,15 @@ export default async function handler(req, res) {
   let browser;
 
   try {
-    console.log("🚀 Launching browser...");
+    console.log("🚀 Launching Chromium...");
+
+    chromium.setGraphicsMode = false;
 
     browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu",
-        "--no-zygote"
-      ]
+      args: chromium.args,
+      defaultViewport: chromium.defaultViewport,
+      executablePath: await chromium.executablePath(),
+      headless: true
     });
 
     const page = await browser.newPage();
@@ -42,7 +39,7 @@ export default async function handler(req, res) {
     await page.setUserAgent(
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
       "AppleWebKit/537.36 (KHTML, like Gecko) " +
-      "Chrome/124.0.0.0 Safari/537.36"
+      "Chrome/131.0.0.0 Safari/537.36"
     );
 
     await page.setViewport({
@@ -57,48 +54,30 @@ export default async function handler(req, res) {
       timeout: 15000
     });
 
-    console.log(
-      "📡 STATUS:",
-      response ? response.status() : "NO RESPONSE"
-    );
-
     await new Promise(resolve =>
       setTimeout(resolve, 5000)
     );
 
     const title = await page.title();
-
     const html = await page.content();
 
+    console.log("📡 STATUS:", response?.status());
     console.log("📄 TITLE:", title);
     console.log("📄 HTML:", html.length);
 
     await browser.close();
-    browser = null;
 
     return res.status(200).json({
       success: true,
-
-      status:
-        response
-          ? response.status()
-          : null,
-
+      status: response?.status() ?? null,
       title,
-
-      htmlLength:
-        html.length,
-
-      url:
-        page.url()
+      htmlLength: html.length,
+      url: page.url()
     });
 
   } catch (error) {
 
-    console.error(
-      "❌ PUPPETEER ERROR:",
-      error
-    );
+    console.error("❌ BROWSER ERROR:", error);
 
     if (browser) {
       try {

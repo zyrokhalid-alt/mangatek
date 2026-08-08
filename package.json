@@ -7,8 +7,9 @@
     "node": "22.x"
   },
   "dependencies": {
+    "@sparticuz/chromium": "^149.0.0",
     "axios": "^1.19.0",
     "cheerio": "^1.2.0",
-    "puppeteer": "^25.5.0"
+    "puppeteer-core": "^25.5.0"
   }
 }
