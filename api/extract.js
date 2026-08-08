@@ -1,3 +1,4 @@
+```js
 import axios from "axios";
 import * as cheerio from "cheerio";
 
@@ -79,10 +80,8 @@ function normalizeUrl(raw, baseUrl) {
 
   let value = raw.trim();
 
-  // Remove quotes
   value = value.replace(/^["'`]+|["'`]+$/g, "");
 
-  // Decode escaped URLs
   value = value
     .replace(/\\u0026/gi, "&")
     .replace(/\\u003f/gi, "?")
@@ -90,14 +89,18 @@ function normalizeUrl(raw, baseUrl) {
     .replace(/\\u002f/gi, "/")
     .replace(/\\\//g, "/");
 
-  // Remove whitespace
+  value = value
+    .replace(/\u0026/gi, "&")
+    .replace(/\u003f/gi, "?")
+    .replace(/\u003d/gi, "=")
+    .replace(/\u002f/gi, "/");
+
   value = value.split(/\s+/)[0];
 
   if (!value) {
     return null;
   }
 
-  // Protocol-relative
   if (value.startsWith("//")) {
     value = "https:" + value;
   }
@@ -287,7 +290,10 @@ function extractWithCheerio(
   try {
     const $ = cheerio.load(html);
 
+    // ==================================================
     // IMG
+    // ==================================================
+
     $("img").each((_, element) => {
       const attributes = [
         "src",
@@ -332,7 +338,10 @@ function extractWithCheerio(
       );
     });
 
+    // ==================================================
     // SOURCE
+    // ==================================================
+
     $("source").each((_, element) => {
       const src =
         $(element).attr("src");
@@ -354,7 +363,10 @@ function extractWithCheerio(
       );
     });
 
+    // ==================================================
     // PICTURE
+    // ==================================================
+
     $("picture source").each(
       (_, element) => {
         const src =
@@ -402,7 +414,10 @@ function extractWithRegex(
     return images;
   }
 
-  // Direct HTTPS URLs
+  // ==================================================
+  // DIRECT HTTPS URLS
+  // ==================================================
+
   const directRegex =
     /https?:\/\/[^"'<>\\\s]+/gi;
 
@@ -425,7 +440,10 @@ function extractWithRegex(
     );
   }
 
-  // Protocol relative
+  // ==================================================
+  // PROTOCOL RELATIVE
+  // ==================================================
+
   const protocolRegex =
     /\/\/[^"'<>\\\s]+/gi;
 
@@ -445,7 +463,10 @@ function extractWithRegex(
     );
   }
 
-  // Relative images
+  // ==================================================
+  // RELATIVE IMAGE URLS
+  // ==================================================
+
   const relativeRegex =
     /["'`]([^"'`<>\\\s]+?\.(?:jpg|jpeg|png|webp|avif|jfif)(?:\?[^"'`]*)?)["'`]/gi;
 
@@ -490,7 +511,10 @@ function extractFromScripts(
         return;
       }
 
-      // Direct URLs
+      // ==================================================
+      // DIRECT URLS
+      // ==================================================
+
       const directRegex =
         /https?:\/\/[^"'\\\s]+/gi;
 
@@ -513,7 +537,10 @@ function extractFromScripts(
         );
       }
 
-      // Protocol URLs
+      // ==================================================
+      // PROTOCOL RELATIVE URLS
+      // ==================================================
+
       const protocolRegex =
         /\/\/[^"'\\\s]+/gi;
 
@@ -533,7 +560,10 @@ function extractFromScripts(
         );
       }
 
-      // Relative images
+      // ==================================================
+      // RELATIVE IMAGE URLS
+      // ==================================================
+
       const relativeRegex =
         /["'`]([^"'`<>\\\s]+?\.(?:jpg|jpeg|png|webp|avif|jfif)(?:\?[^"'`]*)?)["'`]/gi;
 
@@ -640,6 +670,48 @@ function detectSource(url) {
 }
 
 // ======================================================
+// SAFE DEBUG HEADERS
+// ======================================================
+
+function getDebugHeaders(headers) {
+  if (!headers) {
+    return {};
+  }
+
+  const importantHeaders = [
+    "server",
+    "content-type",
+    "content-length",
+    "location",
+    "cf-ray",
+    "cf-cache-status",
+    "x-cache",
+    "x-cache-status",
+    "x-powered-by",
+    "retry-after",
+    "set-cookie",
+    "via",
+    "date",
+  ];
+
+  const result = {};
+
+  for (const header of importantHeaders) {
+    const value =
+      headers[header];
+
+    if (value !== undefined) {
+      result[header] =
+        Array.isArray(value)
+          ? value
+          : String(value);
+    }
+  }
+
+  return result;
+}
+
+// ======================================================
 // JSON RESPONSE
 // ======================================================
 
@@ -651,86 +723,6 @@ function json(
   return res
     .status(status)
     .json(data);
-}
-
-// ======================================================
-// FETCH CHAPTER
-// ======================================================
-
-async function fetchChapter(
-  chapterUrl
-) {
-  const userAgent =
-    getRandomUserAgent();
-
-  console.log(
-    "🌐 HTTP GET:",
-    chapterUrl
-  );
-
-  console.log(
-    "🕵️ User-Agent:",
-    userAgent
-  );
-
-  const response =
-    await axios.get(
-      chapterUrl,
-      {
-        headers: {
-          "User-Agent":
-            userAgent,
-
-          "Accept":
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-
-          "Accept-Language":
-            "en-US,en;q=0.9",
-
-          "Accept-Encoding":
-            "gzip, deflate, br",
-
-          "Cache-Control":
-            "no-cache",
-
-          "Pragma":
-            "no-cache",
-
-          "Upgrade-Insecure-Requests":
-            "1",
-
-          "Sec-Fetch-Dest":
-            "document",
-
-          "Sec-Fetch-Mode":
-            "navigate",
-
-          "Sec-Fetch-Site":
-            "none",
-
-          "Sec-Fetch-User":
-            "?1",
-
-          "Referer":
-            chapterUrl,
-        },
-
-        timeout: 15000,
-
-        maxRedirects: 5,
-
-        maxContentLength:
-          10 * 1024 * 1024,
-
-        responseType:
-          "text",
-
-        validateStatus:
-          () => true,
-      }
-    );
-
-  return response;
 }
 
 // ======================================================
@@ -916,7 +908,7 @@ export default async function handler(
   }
 
   // ====================================================
-  // CACHE
+  // NORMALIZED CACHE KEY
   // ====================================================
 
   const cacheKey =
@@ -937,18 +929,14 @@ export default async function handler(
       res,
       {
         success: true,
-
         source:
           detectSource(
             cacheKey
           ),
-
         count:
           cached.count,
-
         images:
           cached.images,
-
         cached: true,
       },
       200
@@ -956,13 +944,63 @@ export default async function handler(
   }
 
   // ====================================================
-  // FETCH
+  // FETCH WEBSITE
   // ====================================================
 
   try {
+    const userAgent =
+      getRandomUserAgent();
+
+    console.log(
+      "🌐 Fetching:",
+      cacheKey
+    );
+
+    console.log(
+      "🧭 User-Agent:",
+      userAgent
+    );
+
     const response =
-      await fetchChapter(
-        cacheKey
+      await axios.get(
+        cacheKey,
+        {
+          headers: {
+            "User-Agent":
+              userAgent,
+
+            "Referer":
+              cacheKey,
+
+            "Accept":
+              "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+
+            "Accept-Language":
+              "en-US,en;q=0.9",
+
+            "Cache-Control":
+              "no-cache",
+
+            "Pragma":
+              "no-cache",
+
+            "Upgrade-Insecure-Requests":
+              "1",
+          },
+
+          timeout: 15000,
+
+          maxRedirects: 5,
+
+          maxContentLength:
+            10 * 1024 * 1024,
+
+          responseType:
+            "text",
+
+          validateStatus:
+            () => true,
+        }
       );
 
     console.log(
@@ -970,9 +1008,15 @@ export default async function handler(
       response.status
     );
 
+    console.log(
+      "📍 Response Headers:",
+      getDebugHeaders(
+        response.headers
+      )
+    );
+
     const html =
-      typeof response.data ===
-      "string"
+      typeof response.data === "string"
         ? response.data
         : "";
 
@@ -982,7 +1026,7 @@ export default async function handler(
     );
 
     // ==================================================
-    // 404
+    // HTTP 404
     // ==================================================
 
     if (
@@ -996,33 +1040,103 @@ export default async function handler(
             "Chapter not found on the website",
           status:
             response.status,
+          source:
+            detectSource(
+              cacheKey
+            ),
         },
         404
       );
     }
 
     // ==================================================
-    // 401 / 403
+    // HTTP 401 / 403
     // ==================================================
 
     if (
       response.status === 401 ||
       response.status === 403
     ) {
+      const bodyPreview =
+        typeof response.data === "string"
+          ? response.data.slice(
+              0,
+              3000
+            )
+          : null;
+
+      console.log(
+        "🚫 WEBSITE BLOCKED REQUEST"
+      );
+
+      console.log(
+        "🚫 Status:",
+        response.status
+      );
+
+      console.log(
+        "🚫 Headers:",
+        getDebugHeaders(
+          response.headers
+        )
+      );
+
+      console.log(
+        "🚫 Body Preview:",
+        bodyPreview
+      );
+
       return json(
         res,
         {
           success: false,
+
           error:
             "The website blocked the request",
+
           status:
             response.status,
+
           source:
             detectSource(
               cacheKey
             ),
+
+          debug: {
+            requestUrl:
+              cacheKey,
+
+            finalUrl:
+              response.request
+                ?.res
+                ?.responseUrl ||
+              cacheKey,
+
+            status:
+              response.status,
+
+            statusText:
+              response.statusText ||
+              null,
+
+            contentType:
+              response.headers[
+                "content-type"
+              ] || null,
+
+            headers:
+              getDebugHeaders(
+                response.headers
+              ),
+
+            htmlLength:
+              html.length,
+
+            bodyPreview:
+              bodyPreview,
+          },
         },
-        403
+        response.status
       );
     }
 
@@ -1041,13 +1155,25 @@ export default async function handler(
             "Website returned an error",
           status:
             response.status,
+          source:
+            detectSource(
+              cacheKey
+            ),
+          debug: {
+            headers:
+              getDebugHeaders(
+                response.headers
+              ),
+            htmlLength:
+              html.length,
+          },
         },
         502
       );
     }
 
     // ==================================================
-    // EXTRACT
+    // EXTRACT IMAGES
     // ==================================================
 
     const imageUrls =
@@ -1095,6 +1221,17 @@ export default async function handler(
                 ?.res
                 ?.responseUrl ||
               cacheKey,
+
+            headers:
+              getDebugHeaders(
+                response.headers
+              ),
+
+            bodyPreview:
+              html.slice(
+                0,
+                3000
+              ),
           },
         },
         404
@@ -1124,7 +1261,7 @@ export default async function handler(
 
     // ==================================================
     // RESPONSE
-    // ====================================================
+    // ==================================================
 
     return json(
       res,
@@ -1146,6 +1283,7 @@ export default async function handler(
       },
       200
     );
+
   } catch (error) {
     console.error(
       "❌ EXTRACT ERROR:",
@@ -1168,6 +1306,8 @@ export default async function handler(
           success: false,
           error:
             "Request timeout. The website took too long to respond.",
+          code:
+            error.code,
         },
         504
       );
@@ -1187,13 +1327,15 @@ export default async function handler(
           success: false,
           error:
             "Could not resolve the website hostname.",
+          code:
+            error.code,
         },
         400
       );
     }
 
     // ==================================================
-    // NETWORK
+    // NETWORK ERROR
     // ==================================================
 
     if (
@@ -1218,7 +1360,7 @@ export default async function handler(
     }
 
     // ==================================================
-    // GENERIC
+    // GENERIC ERROR
     // ==================================================
 
     return json(
@@ -1232,8 +1374,13 @@ export default async function handler(
         details:
           error?.message ||
           "Unknown error",
+
+        code:
+          error?.code ||
+          null,
       },
       500
     );
   }
 }
+```
