@@ -150,6 +150,9 @@
     <symbol id="ic-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.6"/><path d="M20 15l-4.5-4.5L8 18"/>
     </symbol>
+    <symbol id="ic-loader" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="9" opacity="0.2"/><path d="M12 3a9 9 0 0 1 9 9"/>
+    </symbol>
   </defs>
 </svg>
 
@@ -163,13 +166,12 @@
     </a>
     <ul class="nav-links">
       <li><a href="/" class="is-active">الرئيسية</a></li>
-      <li><a href="/convert-manga-to-pdf">تحويل مانجا PDF</a></li>
       <li><a href="#tools">الأدوات</a></li>
       <li><a href="#sources">المصادر المدعومة</a></li>
       <li><a href="#faq">الأسئلة الشائعة</a></li>
     </ul>
     <div class="nav-actions">
-      <a href="/convert-manga-to-pdf" class="btn btn-primary btn-sm">
+      <a href="#extract-section" class="btn btn-primary btn-sm">
         <svg class="icon"><use href="#ic-bolt"/></svg> جرّب الأداة
       </a>
     </div>
@@ -189,10 +191,10 @@
         وتدعم أشهر مواقع قراءة المانجا مثل MangaDex وWebtoons وغيرها.
       </p>
       <div class="hero-actions">
-        <a href="/convert-manga-to-pdf" class="btn btn-primary">
+        <a href="#extract-section" class="btn btn-primary">
           <svg class="icon"><use href="#ic-bolt"/></svg> ابدأ الآن
         </a>
-        <a href="/convert-manga-to-pdf" class="btn btn-outline">
+        <a href="#extract-section" class="btn btn-outline">
           <svg class="icon"><use href="#ic-download"/></svg> تحويل المانجا إلى PDF
         </a>
       </div>
@@ -225,6 +227,68 @@
     </div>
   </section>
 
+  <!-- ============ Extract Section ============ -->
+  <section class="section" id="extract-section">
+    <div class="section-head">
+      <span class="section-eyebrow"><svg class="icon"><use href="#ic-bolt"/></svg> استخراج الصور</span>
+      <h2>حوّل فصل المانجا الآن</h2>
+      <p>الصق رابط الفصل من أي موقع مدعوم واستخرج الصور مباشرة.</p>
+    </div>
+
+    <div class="extract-container">
+      <form id="extract-form" class="extract-form">
+        <div class="form-group">
+          <label for="chapter-url">رابط الفصل</label>
+          <input 
+            type="url" 
+            id="chapter-url" 
+            name="chapterUrl" 
+            placeholder="https://example.com/manga/chapter/1"
+            required
+          >
+          <small>مثال: https://mangadex.org/chapter/xxxxx</small>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" id="extract-btn">
+          <svg class="icon"><use href="#ic-download"/></svg> استخراج الصور
+        </button>
+      </form>
+
+      <!-- Results -->
+      <div id="extract-results" class="extract-results hidden">
+        <div class="results-header">
+          <h3>تم استخراج الصور بنجاح ✅</h3>
+          <p id="result-count">وجدنا <strong>0</strong> صورة</p>
+        </div>
+
+        <div class="results-actions">
+          <button id="download-btn" class="btn btn-primary">
+            <svg class="icon"><use href="#ic-download"/></svg> تحميل الصور
+          </button>
+          <button id="view-btn" class="btn btn-outline">
+            <svg class="icon"><use href="#ic-book"/></svg> عرض المعاينة
+          </button>
+        </div>
+
+        <div class="results-gallery" id="results-gallery">
+          <!-- Images will be loaded here -->
+        </div>
+      </div>
+
+      <!-- Error Message -->
+      <div id="extract-error" class="extract-error hidden">
+        <h3>حدث خطأ ❌</h3>
+        <p id="error-message"></p>
+        <button type="button" class="btn btn-outline" onclick="resetForm()">حاول مرة أخرى</button>
+      </div>
+
+      <!-- Loading -->
+      <div id="extract-loading" class="extract-loading hidden">
+        <svg class="icon loading-spinner"><use href="#ic-loader"/></svg>
+        <p>جاري استخراج الصور...</p>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ Tools ============ -->
   <section class="section" id="tools">
     <div class="section-head">
@@ -233,18 +297,18 @@
       <p>مجموعة أدوات مانجا مجانية تغطي كل ما تحتاجه، من تحويل الفصول إلى PDF وحتى قراءتها مباشرة أونلاين.</p>
     </div>
     <div class="tools-grid">
-      <a href="/convert-manga-to-pdf" class="tool-card">
+      <div class="tool-card">
         <span class="tool-badge tool-badge--live">متاح الآن</span>
         <div class="tool-icon"><svg class="icon"><use href="#ic-download"/></svg></div>
-        <h3>Manga to PDF</h3>
-        <p>حوّل أي فصل مانجا إلى ملف PDF بجودة تختارها أنت، في ثوانٍ ومن غير تسجيل.</p>
-      </a>
-      <a href="/convert-manga-to-pdf" class="tool-card">
-        <span class="tool-badge tool-badge--live">متاح الآن</span>
+        <h3>Manga Image Extractor</h3>
+        <p>استخرج صور فصول المانجا من أي موقع مدعوم في ثوانٍ.</p>
+      </div>
+      <div class="tool-card">
+        <span class="tool-badge tool-badge--soon">قريبًا</span>
         <div class="tool-icon"><svg class="icon"><use href="#ic-book"/></svg></div>
-        <h3>Manga Reader</h3>
-        <p>اقرأ فصول المانجا مباشرة داخل المتصفح بدون تحميل أي ملف على جهازك.</p>
-      </a>
+        <h3>Manga to PDF</h3>
+        <p>حوّل صور الفصول إلى ملف PDF بجودة عالية على جهازك.</p>
+      </div>
       <div class="tool-card">
         <span class="tool-badge tool-badge--soon">قريبًا</span>
         <div class="tool-icon"><svg class="icon"><use href="#ic-box"/></svg></div>
@@ -266,8 +330,6 @@
     </div>
   </section>
 
- 
-
   <!-- ============ Supported sites ============ -->
   <section class="section" id="sources">
     <div class="section-head">
@@ -281,47 +343,41 @@
         <h3>MangaDex</h3>
         <div class="site-card-actions">
           <a href="https://mangadex.org" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
-          <a href="/convert-manga-to-pdf" class="btn btn-primary">استخدام الأداة</a>
         </div>
       </div>
       <div class="site-card">
-        <div class="site-logo">MA</div>
-        <h3>MangaDar</h3>
+        <div class="site-logo">MS</div>
+        <h3>Manga Starz</h3>
         <div class="site-card-actions">
-          <a href="https://mangadar.com" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
-          <a href="/convert-manga-to-pdf" class="btn btn-primary">استخدام الأداة</a>
+          <a href="https://manga-starz.net" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
         </div>
       </div>
       <div class="site-card">
-        <div class="site-logo">WT</div>
-        <h3>Webtoons</h3>
+        <div class="site-logo">ML</div>
+        <h3>Mangalek</h3>
         <div class="site-card-actions">
-          <a href="https://webtoons.com" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
-          <a href="/convert-manga-to-pdf" class="btn btn-primary">استخدام الأداة</a>
+          <a href="https://mangalek.me" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
         </div>
       </div>
       <div class="site-card">
-        <div class="site-logo">AS</div>
-        <h3>Asura Scans</h3>
+        <div class="site-logo">MK</div>
+        <h3>MangaKakalot</h3>
         <div class="site-card-actions">
-          <a href="https://asuracomic.net" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
-          <a href="/convert-manga-to-pdf" class="btn btn-primary">استخدام الأداة</a>
+          <a href="https://mangakakalot.com" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
         </div>
       </div>
       <div class="site-card">
-        <div class="site-logo">RS</div>
-        <h3>Reaper Scans</h3>
+        <div class="site-logo">MP</div>
+        <h3>Manhua Plus</h3>
         <div class="site-card-actions">
-          <a href="https://reaperscans.com" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
-          <a href="/convert-manga-to-pdf" class="btn btn-primary">استخدام الأداة</a>
+          <a href="https://manhuaplus.com" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
         </div>
       </div>
       <div class="site-card">
-        <div class="site-logo">FS</div>
-        <h3>Flame Scans</h3>
+        <div class="site-logo">MR</div>
+        <h3>MangaRaw</h3>
         <div class="site-card-actions">
-          <a href="https://flamescans.org" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
-          <a href="/convert-manga-to-pdf" class="btn btn-primary">استخدام الأداة</a>
+          <a href="https://mangaraw.org" target="_blank" rel="noopener" class="btn btn-outline"><svg class="icon"><use href="#ic-external"/></svg> زيارة الموقع</a>
         </div>
       </div>
     </div>
@@ -333,13 +389,13 @@
     <div class="section-head">
       <span class="section-eyebrow"><svg class="icon"><use href="#ic-bolt"/></svg> How It Works</span>
       <h2>كيف يعمل الموقع؟</h2>
-      <p>أربع خطوات بسيطة وتقدر تاخد نسخة PDF من فصل المانجا أو تقرأه مباشرة.</p>
+      <p>أربع خطوات بسيطة وتقدر تاخد نسخة من فصل المانجا أو تقرأه مباشرة.</p>
     </div>
     <div class="steps">
       <div class="step"><div class="step-num">01</div><h3>انسخ رابط الفصل</h3><p>من أي موقع مانجا مدعوم، انسخ رابط صفحة الفصل اللي عايز تحوّله.</p></div>
-      <div class="step"><div class="step-num">02</div><h3>الصقه داخل الأداة</h3><p>افتح أداة Manga to PDF والصق الرابط في الحقل المخصص.</p></div>
-      <div class="step"><div class="step-num">03</div><h3>اختر الجودة</h3><p>حدد مستوى جودة الصور المناسب لك بين اقتصادي، متوسط، أو عالي.</p></div>
-      <div class="step"><div class="step-num">04</div><h3>حمّل أو اقرأ مباشرة</h3><p>حمّل ملف الـ PDF لجهازك أو اقرأ الفصل مباشرة داخل الموقع.</p></div>
+      <div class="step"><div class="step-num">02</div><h3>الصقه داخل الأداة</h3><p>افتح أداة الاستخراج والصق الرابط في الحقل المخصص أعلى الصفحة.</p></div>
+      <div class="step"><div class="step-num">03</div><h3>اضغط استخراج</h3><p>اضغط زر استخراج الصور وانتظر ثوانٍ قليلة.</p></div>
+      <div class="step"><div class="step-num">04</div><h3>حمّل أو شارك</h3><p>حمّل الصور أو شاهد المعاينة مباشرة داخل الموقع.</p></div>
     </div>
   </section>
   </div>
@@ -354,7 +410,7 @@
     <div class="faq">
       <details open>
         <summary>هل MangaTek مجاني بالكامل؟ <svg class="icon"><use href="#ic-chevron"/></svg></summary>
-        <p class="faq-a">نعم، جميع أدوات MangaTek بما فيها تحويل المانجا إلى PDF وقارئ المانجا مجانية بالكامل وبدون أي اشتراك أو رسوم مخفية.</p>
+        <p class="faq-a">نعم، جميع أدوات MangaTek بما فيها استخراج الصور مجانية بالكامل وبدون أي اشتراك أو رسوم مخفية.</p>
       </details>
       <details>
         <summary>هل يدعم MangaTek كل مواقع المانجا؟ <svg class="icon"><use href="#ic-chevron"/></svg></summary>
@@ -379,23 +435,6 @@
     </div>
   </section>
 
-  <!-- ============ Upcoming tools ============ -->
-  <div class="section-alt">
-  <section class="section">
-    <div class="section-head">
-      <span class="section-eyebrow"><svg class="icon"><use href="#ic-clock"/></svg> Coming Soon</span>
-      <h2>أدوات قادمة قريبًا</h2>
-      <p>بنطور MangaTek باستمرار — دي بعض الأدوات الجاي قريبًا.</p>
-    </div>
-    <div class="upcoming-grid">
-      <div class="upcoming-card"><svg class="icon"><use href="#ic-star"/></svg><h3>Anime Tools</h3><p>مجموعة أدوات مخصصة لعشاق الأنمي.</p><span class="tool-badge tool-badge--soon">قريبًا</span></div>
-      <div class="upcoming-card"><svg class="icon"><use href="#ic-box"/></svg><h3>CBZ Converter</h3><p>تحويل الفصول والمجلدات إلى صيغة CBZ.</p><span class="tool-badge tool-badge--soon">قريبًا</span></div>
-      <div class="upcoming-card"><svg class="icon"><use href="#ic-globe"/></svg><h3>Manga Translator</h3><p>ترجمة صفحات المانجا تلقائيًا لعدة لغات.</p><span class="tool-badge tool-badge--soon">قريبًا</span></div>
-      <div class="upcoming-card"><svg class="icon"><use href="#ic-image"/></svg><h3>Anime Wallpaper Generator</h3><p>توليد خلفيات أنمي عالية الجودة لجهازك.</p><span class="tool-badge tool-badge--soon">قريبًا</span></div>
-    </div>
-  </section>
-  </div>
-
 </main>
 
 <footer class="site-footer">
@@ -405,15 +444,15 @@
         <img src="assets/mark.svg" class="brand-mark" alt="MangaTek">
         <span class="brand-word"><span class="w-manga">Manga</span><span class="w-tek">Tek</span></span>
       </a>
-      <p>منصة عربية مجانية لتحميل وتحويل وقراءة المانجا أونلاين. Manga to PDF، Manga Reader، وأدوات مانجا أخرى قادمة قريبًا.</p>
+      <p>منصة عربية مجانية لتحميل وتحويل وقراءة المانجا أونلاين. استخراج صور المانجا، وأدوات مانجا أخرى قادمة قريبًا.</p>
     </div>
     <div class="footer-col">
       <h4>روابط سريعة</h4>
       <ul>
         <li><a href="/">الرئيسية</a></li>
-        <li><a href="/convert-manga-to-pdf">تحويل مانجا إلى PDF</a></li>
-        <li><a href="/#sources">المواقع المدعومة</a></li>
-        <li><a href="/#faq">الأسئلة الشائعة</a></li>
+        <li><a href="#extract-section">استخراج الصور</a></li>
+        <li><a href="#sources">المواقع المدعومة</a></li>
+        <li><a href="#faq">الأسئلة الشائعة</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -442,6 +481,8 @@
     </span>
   </div>
 </footer>
+
+<script src="js/app.js"></script>
 
 </body>
 </html>
