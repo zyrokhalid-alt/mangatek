@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import * as cheerio from "cheerio";
 
@@ -80,7 +79,7 @@ function normalizeUrl(raw, baseUrl) {
 
   let value = raw.trim();
 
-  // Remove surrounding quotes
+  // Remove quotes
   value = value.replace(/^["'`]+|["'`]+$/g, "");
 
   // Decode escaped URLs
@@ -89,10 +88,7 @@ function normalizeUrl(raw, baseUrl) {
     .replace(/\\u003f/gi, "?")
     .replace(/\\u003d/gi, "=")
     .replace(/\\u002f/gi, "/")
-    .replace(/\\\//g, "/");
-
-  // Decode literal unicode escape sequences
-  value = value
+    .replace(/\\\//g, "/")
     .replace(/\u0026/gi, "&")
     .replace(/\u003f/gi, "?")
     .replace(/\u003d/gi, "=")
@@ -105,7 +101,7 @@ function normalizeUrl(raw, baseUrl) {
     return null;
   }
 
-  // Protocol-relative URL
+  // Protocol-relative
   if (value.startsWith("//")) {
     value = "https:" + value;
   }
@@ -310,8 +306,7 @@ function extractWithCheerio(
       ];
 
       for (const attr of attributes) {
-        const value =
-          $(element).attr(attr);
+        const value = $(element).attr(attr);
 
         if (value) {
           addImage(
@@ -343,8 +338,7 @@ function extractWithCheerio(
     // ==================================================
 
     $("source").each((_, element) => {
-      const src =
-        $(element).attr("src");
+      const src = $(element).attr("src");
 
       if (src) {
         addImage(
@@ -392,7 +386,7 @@ function extractWithCheerio(
   } catch (error) {
     console.error(
       "❌ Cheerio extraction error:",
-      error?.message
+      error.message
     );
   }
 
@@ -415,7 +409,7 @@ function extractWithRegex(
   }
 
   // ==================================================
-  // DIRECT HTTPS URLS
+  // DIRECT HTTPS URLs
   // ==================================================
 
   const directRegex =
@@ -464,7 +458,7 @@ function extractWithRegex(
   }
 
   // ==================================================
-  // RELATIVE IMAGE URLS
+  // RELATIVE URLs
   // ==================================================
 
   const relativeRegex =
@@ -540,7 +534,7 @@ function extractFromScripts(
       }
 
       // ==================================================
-      // PROTOCOL RELATIVE URLS
+      // PROTOCOL-RELATIVE URLS
       // ==================================================
 
       const protocolRegex =
@@ -561,30 +555,11 @@ function extractFromScripts(
           seen
         );
       }
-
-      // ==================================================
-      // RELATIVE IMAGE URLS
-      // ==================================================
-
-      const relativeRegex =
-        /["'`]([^"'`<>\\\s]+?\.(?:jpg|jpeg|png|webp|avif|jfif)(?:\?[^"'`]*)?)["'`]/gi;
-
-      const relativeMatches =
-        content.matchAll(relativeRegex);
-
-      for (const match of relativeMatches) {
-        addImage(
-          match[1],
-          baseUrl,
-          images,
-          seen
-        );
-      }
     });
   } catch (error) {
     console.error(
       "❌ Script extraction error:",
-      error?.message
+      error.message
     );
   }
 
@@ -637,31 +612,45 @@ function detectSource(url) {
         .hostname
         .toLowerCase();
 
-    if (hostname.includes("mangatek")) {
+    if (
+      hostname.includes("mangatek")
+    ) {
       return "mangatek";
     }
 
-    if (hostname.includes("mangadex")) {
+    if (
+      hostname.includes("mangadex")
+    ) {
       return "mangadex";
     }
 
-    if (hostname.includes("manga-starz")) {
+    if (
+      hostname.includes("manga-starz")
+    ) {
       return "manga-starz";
     }
 
-    if (hostname.includes("mangalek")) {
+    if (
+      hostname.includes("mangalek")
+    ) {
       return "mangalek";
     }
 
-    if (hostname.includes("mangakakalot")) {
+    if (
+      hostname.includes("mangakakalot")
+    ) {
       return "mangakakalot";
     }
 
-    if (hostname.includes("manhuaplus")) {
+    if (
+      hostname.includes("manhuaplus")
+    ) {
       return "manhuaplus";
     }
 
-    if (hostname.includes("mangaraw")) {
+    if (
+      hostname.includes("mangaraw")
+    ) {
       return "mangaraw";
     }
 
@@ -672,14 +661,10 @@ function detectSource(url) {
 }
 
 // ======================================================
-// JSON RESPONSE
+// JSON RESPONSE - VERCEL NODE.JS
 // ======================================================
 
-function json(
-  res,
-  data,
-  status = 200
-) {
+function json(res, data, status = 200) {
   return res
     .status(status)
     .json(data);
@@ -687,6 +672,13 @@ function json(
 
 // ======================================================
 // HANDLER
+// ======================================================
+// IMPORTANT:
+// Vercel Node.js Functions use:
+// export default async function handler(req, res)
+//
+// NOT:
+// return new Response(...)
 // ======================================================
 
 export default async function handler(
@@ -721,9 +713,7 @@ export default async function handler(
       "Content-Type"
     );
 
-    return res
-      .status(200)
-      .json({});
+    return res.status(200).json({});
   }
 
   // ====================================================
@@ -770,8 +760,7 @@ export default async function handler(
   // BODY
   // ====================================================
 
-  const body =
-    req.body || {};
+  const body = req.body || {};
 
   const chapterUrl =
     body?.chapterUrl;
@@ -889,14 +878,18 @@ export default async function handler(
       res,
       {
         success: true,
+
         source:
           detectSource(
             cacheKey
           ),
+
         count:
           cached.count,
+
         images:
           cached.images,
+
         cached: true,
       },
       200
@@ -944,8 +937,7 @@ export default async function handler(
           maxContentLength:
             10 * 1024 * 1024,
 
-          responseType:
-            "text",
+          responseType: "text",
 
           validateStatus:
             () => true,
@@ -953,7 +945,7 @@ export default async function handler(
       );
 
     console.log(
-      "📊 HTTP Status:",
+      "📡 HTTP Status:",
       response.status
     );
 
@@ -1131,9 +1123,9 @@ export default async function handler(
     // ==================================================
 
     if (
-      error?.code ===
+      error.code ===
         "ECONNABORTED" ||
-      error?.code ===
+      error.code ===
         "ETIMEDOUT"
     ) {
       return json(
@@ -1152,7 +1144,7 @@ export default async function handler(
     // ==================================================
 
     if (
-      error?.code ===
+      error.code ===
       "ENOTFOUND"
     ) {
       return json(
@@ -1171,11 +1163,11 @@ export default async function handler(
     // ==================================================
 
     if (
-      error?.code ===
+      error.code ===
         "ECONNRESET" ||
-      error?.code ===
+      error.code ===
         "ECONNREFUSED" ||
-      error?.code ===
+      error.code ===
         "EAI_AGAIN"
     ) {
       return json(
@@ -1211,4 +1203,3 @@ export default async function handler(
     );
   }
 }
-
